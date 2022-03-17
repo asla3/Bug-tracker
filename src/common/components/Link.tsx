@@ -1,9 +1,10 @@
 import * as React from 'react';
-import clsx from 'clsx';
-import { useRouter } from 'next/router';
-import NextLink, { LinkProps as NextLinkProps } from 'next/link';
+
 import MuiLink, { LinkProps as MuiLinkProps } from '@mui/material/Link';
 import { styled } from '@mui/material/styles';
+import clsx from 'clsx';
+import NextLink, { LinkProps as NextLinkProps } from 'next/link';
+import { useRouter } from 'next/router';
 
 // Add support for the sx prop for consistency with the other branches.
 const Anchor = styled('a')({});
@@ -64,7 +65,6 @@ const Link = React.forwardRef<HTMLAnchorElement, LinkProps>(function Link(
 		noLinkStyle,
 		prefetch,
 		replace,
-		role, // Link don't have roles.
 		scroll,
 		shallow,
 		...other

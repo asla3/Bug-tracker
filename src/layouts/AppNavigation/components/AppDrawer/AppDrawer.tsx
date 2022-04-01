@@ -38,7 +38,7 @@ import {
 
 import { DESKTOP_SIDEBAR_START } from '../../constants';
 
-export interface MainDrawerProps {
+export interface AppDrawerProps {
 	organizations: Organization[];
 	currentOrganization: Organization;
 	projects: Project[];
@@ -86,14 +86,14 @@ export const ListItemLinkButton = ({
 	);
 };
 
-const MainDrawer = ({
+const AppDrawer = ({
 	projects,
 	organizations,
 	currentOrganization,
 	mobileDrawerOpen,
 	onMobileDrawerClose,
 	sx = [],
-}: MainDrawerProps) => {
+}: AppDrawerProps) => {
 	const [projectsExpanded, setProjectsExpanded] = React.useState(false);
 	const [hoveredProjectId, setHoveredProjectId] = React.useState<null | string>(
 		null
@@ -306,4 +306,4 @@ const OrganizationHeader = ({
 	);
 };
 
-export default MainDrawer;
+export default AppDrawer;

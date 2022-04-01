@@ -8,6 +8,8 @@ export const SIGNUP = '/signup';
 
 export const PROFILE = '/profile';
 
+export const LOGOUT = '/logout';
+
 export const ORGANIZATION_ID_PARAM = ':organizationId';
 
 export const PROJECT_ID_PARAM = ':projectId';

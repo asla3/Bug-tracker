@@ -284,7 +284,9 @@ const OrganizationHeader = ({
 					src={currentOrganization.imageUrl}
 					alt=""
 				/>
-				<Typography variant="h6">{currentOrganization.name}</Typography>
+				<Typography variant="h6" component="span" display="block">
+					{currentOrganization.name}
+				</Typography>
 				<Button
 					variant="text"
 					onClick={openOrganizationSwitcher}

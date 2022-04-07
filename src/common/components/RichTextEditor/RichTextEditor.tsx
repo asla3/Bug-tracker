@@ -4,15 +4,15 @@ import FormControl, { FormControlProps } from '@mui/material/FormControl';
 import FormHelperText, {
 	FormHelperTextProps as TFormHelperTextProps,
 } from '@mui/material/FormHelperText';
-import InputLabel, {
-	InputLabelProps as TInputLabelProps,
-} from '@mui/material/InputLabel';
 import { unstable_useId } from '@mui/utils';
 
 import RichTextEditorBase, {
 	RichTextEditorBaseProps as TRichTextEditorBaseProps,
 	Editor,
 } from '@/common/components/RichTextEditorBase';
+import StaticInputLabel, {
+	StaticInputLabelProps as TStaticInputLabelProps,
+} from '@/common/components/StaticInputLabel';
 import callAll from '@/common/utils/callAll';
 
 export interface RichTextEditorProps
@@ -31,9 +31,9 @@ export interface RichTextEditorProps
 	 */
 	helperText?: React.ReactNode;
 	/**
-	 * Props spread to the `InputLabel` component.
+	 * Props spread to the `StaticInputLabel` component.
 	 * */
-	InputLabelProps?: TInputLabelProps;
+	StaticInputLabelProps?: TStaticInputLabelProps;
 	/**
 	 * Props spread to the `FormHelperText` component.
 	 */
@@ -64,11 +64,10 @@ const RichTextEditor = ({
 	margin,
 	RichTextEditorBaseProps,
 	FormHelperTextProps: { id: FormHelperTextId, ...FormHelperTextProps } = {},
-	InputLabelProps: {
-		onClick: InputLabelOnClick,
-		sx: InputLabelSx = [],
-		id: InputLabelId,
-		...InputLabelProps
+	StaticInputLabelProps: {
+		onClick: StaticInputLabelOnClick,
+		id: StaticInputLabelId,
+		...StaticInputLabelProps
 	} = {},
 	sx,
 }: RichTextEditorProps) => {
@@ -91,25 +90,20 @@ const RichTextEditor = ({
 			sx={sx}
 		>
 			{label && (
-				<InputLabel
-					shrink
+				<StaticInputLabel
 					onClick={callAll<React.MouseEvent<HTMLLabelElement>[], void>(
 						focusEditor,
-						InputLabelOnClick
+						StaticInputLabelOnClick
 					)}
 					id={
-						labelId && InputLabelId
-							? `${labelId} ${InputLabelId}`
-							: labelId || InputLabelId
+						labelId && StaticInputLabelId
+							? `${labelId} ${StaticInputLabelId}`
+							: labelId || StaticInputLabelId
 					}
-					sx={[
-						{ transform: 'none', marginBottom: 1, position: 'static' },
-						...(Array.isArray(InputLabelSx) ? InputLabelSx : [InputLabelSx]),
-					]}
-					{...InputLabelProps}
+					{...StaticInputLabelProps}
 				>
 					{label}
-				</InputLabel>
+				</StaticInputLabel>
 			)}
 			<RichTextEditorBase
 				value={value}

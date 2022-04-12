@@ -194,7 +194,7 @@ const DropZone = ({
 					</ButtonBase>
 				</Box>
 			</Box>
-			{error && <FormHelperText error={true}>{error}</FormHelperText>}
+			{error && <FormHelperText error>{error}</FormHelperText>}
 		</>
 	);
 };

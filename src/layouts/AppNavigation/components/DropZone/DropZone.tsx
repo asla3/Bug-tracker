@@ -158,6 +158,7 @@ const DropZone = ({
 					style={{ display: 'none' }}
 					ref={fileInputRef}
 					onChange={handleFileUpload}
+					value=""
 					multiple
 				/>
 				<Box

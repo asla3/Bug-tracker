@@ -144,11 +144,18 @@ const DropZone = ({
 					borderWidth: fileIsBeingDragged ? 2 : 1,
 					borderColor: fileIsBeingDragged
 						? theme.palette.primary.main
-						: theme.palette.text.primary,
+						: theme.palette.mode === 'light'
+						? 'rgba(0, 0, 0, 0.23)'
+						: 'rgba(255, 255, 255, 0.23)',
 					display: 'flex',
 					flexDirection: 'column',
 					justifyContent: 'center',
-					minHeight: fileIsBeingDragged ? 75 : 50,
+					py: fileIsBeingDragged ? 2.5 : 1.5,
+					...(!fileIsBeingDragged && {
+						'&:hover': {
+							borderColor: theme.palette.text.primary,
+						},
+					}),
 				})}
 				id={id}
 				aria-labelledby={labelId}
@@ -163,18 +170,20 @@ const DropZone = ({
 				/>
 				<Box
 					component="span"
-					sx={{
+					sx={(theme) => ({
 						display: 'flex',
 						justifyContent: 'center',
 						alignItems: 'center',
-						opacity: fileIsBeingDragged ? 0.5 : 1,
-					}}
+						color: theme.palette.text.secondary,
+					})}
 				>
 					<CloudUploadOutlinedIcon />
 					<Typography
 						component={DESCRIPTION_TEXT_CONFIG.component}
 						variant={DESCRIPTION_TEXT_CONFIG.variant}
-						sx={{ marginLeft: 1 }}
+						sx={{
+							marginLeft: 1,
+						}}
 					>
 						Drop files to attach or&nbsp;
 					</Typography>

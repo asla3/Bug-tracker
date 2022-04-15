@@ -67,20 +67,22 @@ const Autocomplete = <
 		controlled: valueProp,
 		default: defaultValue,
 		name: 'Autocomplete',
-	});
+	}); // todo: we might want to create our own `useControlled` hook so we can customize the error message
 
 	const handleChange: MuiAutocompleteProps<
 		T,
 		Multiple,
 		DisableClearable,
-		FreeSolo
+		FreeSolo,
+		ChipComponent
 	>['onChange'] = (event, value) => setValue(value);
 
 	const renderInput: MuiAutocompleteProps<
 		T,
 		Multiple,
 		DisableClearable,
-		FreeSolo
+		FreeSolo,
+		ChipComponent
 	>['renderInput'] = (params) => renderInputProp(params, value);
 
 	return (

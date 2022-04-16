@@ -1,6 +1,15 @@
 import { createTheme } from '@mui/material/styles';
 
-// Create a theme instance.
-const theme = createTheme();
+const theme = createTheme({
+	components: {
+		MuiDialogActions: {
+			styleOverrides: {
+				root: ({ theme }) => ({
+					padding: theme.spacing(2, 3), //same padding that DialogTitle is using so they match
+				}),
+			},
+		},
+	},
+});
 
 export default theme;

@@ -22,13 +22,7 @@ export interface DropZoneProps {
 	 * Callback fired when a valid file is uploaded,
 	 * either by dropping it directly into the drop zone or by using the file input.
 	 */
-	onFileAttached: (
-		event:
-			| React.DragEvent<HTMLDivElement>
-			| React.ChangeEvent<HTMLInputElement>,
-		files: File[],
-		eventType: 'onChange' | 'drop'
-	) => void;
+	onFileAttached: OnFileAttached;
 	/**
 	 * Content for the label element.
 	 */
@@ -43,6 +37,16 @@ export interface DropZoneProps {
 	maxSize?: number;
 	id?: string;
 	sx?: SxProps<Theme>;
+}
+
+export interface OnFileAttached {
+	(
+		event:
+			| React.DragEvent<HTMLDivElement>
+			| React.ChangeEvent<HTMLInputElement>,
+		files: File[],
+		eventType: 'onChange' | 'drop'
+	): void;
 }
 
 const DESCRIPTION_TEXT_CONFIG = {

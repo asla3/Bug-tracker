@@ -4,8 +4,9 @@ import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
 import FormHelperText from '@mui/material/FormHelperText';
+import type { SxProps, Theme } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import { unstable_useId } from '@mui/utils';
+import { unstable_useId as useId } from '@mui/utils';
 
 import StaticInputLabel, {
 	StaticInputLabelProps as TStaticInputLabelProps,
@@ -41,6 +42,7 @@ export interface DropZoneProps {
 	 */
 	maxSize?: number;
 	id?: string;
+	sx?: SxProps<Theme>;
 }
 
 const DESCRIPTION_TEXT_CONFIG = {
@@ -62,6 +64,7 @@ const DropZone = ({
 		id: StaticInputLabelId,
 		...StaticInputLabelProps
 	} = {},
+	sx,
 }: DropZoneProps) => {
 	const [dropDepth, setDropDepth] = React.useState(0);
 	const [error, setError] = React.useState<null | string>(null);
@@ -112,11 +115,11 @@ const DropZone = ({
 
 	const browseFiles = () => fileInputRef.current?.click();
 
-	const id = unstable_useId(overridableId);
+	const id = useId(overridableId);
 	const labelId = label && id ? `${id}-label` : undefined;
 
 	return (
-		<>
+		<Box sx={sx}>
 			{label && (
 				<StaticInputLabel
 					id={
@@ -205,7 +208,7 @@ const DropZone = ({
 				</Box>
 			</Box>
 			{error && <FormHelperText error>{error}</FormHelperText>}
-		</>
+		</Box>
 	);
 };
 

@@ -30,12 +30,7 @@ export interface AutocompleteProps<
 	 */
 	renderInput: (
 		params: MuiAutocompleteRenderInputParams,
-		selectedOption: MuiAutocompleteValue<
-			T,
-			Multiple,
-			DisableClearable,
-			FreeSolo
-		> | null // Have to add `null` because MuiAutocompleteValue only returns a union that contains `null` when `disableClearable` is `false`.
+		value: MuiAutocompleteValue<T, Multiple, DisableClearable, FreeSolo> | null // Have to add `null` because MuiAutocompleteValue only returns a union that contains `null` when `disableClearable` is `false`.
 	) => React.ReactNode;
 }
 

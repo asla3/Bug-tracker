@@ -4,7 +4,10 @@ import FormControl, { FormControlProps } from '@mui/material/FormControl';
 import FormHelperText, {
 	FormHelperTextProps as TFormHelperTextProps,
 } from '@mui/material/FormHelperText';
-import { unstable_useId } from '@mui/utils';
+import {
+	unstable_useId as useId,
+	unstable_useForkRef as useForkRef,
+} from '@mui/utils';
 
 import RichTextEditorBase, {
 	RichTextEditorBaseProps as TRichTextEditorBaseProps,
@@ -16,7 +19,7 @@ import StaticInputLabel, {
 import callAll from '@/common/utils/callAll';
 
 export interface RichTextEditorProps
-	//TODO: add support for fullwidth and sizing
+	//TODO: add support for fullwidth and sizing, and consider supporting more styling props from `FormControl`.
 	extends Pick<TRichTextEditorBaseProps, 'value' | 'onChange' | 'id'>,
 		Pick<
 			FormControlProps,
@@ -45,89 +48,104 @@ export interface RichTextEditorProps
 		TRichTextEditorBaseProps,
 		'value' | 'onChange' | 'id'
 	>;
+	/**
+	 * Ref forwarded to the rich text editor.
+	 */
+	innerRef?: React.Ref<Editor>;
 }
 
 /**
  * Wrapper for `RichTextEditorBase` that adds support for `label` and `helperText`.
  */
-const RichTextEditor = ({
-	value,
-	onChange,
-	id: overridableId,
-	label,
-	required,
-	helperText,
-	onBlur,
-	onFocus,
-	disabled,
-	error,
-	margin,
-	RichTextEditorBaseProps,
-	FormHelperTextProps: { id: FormHelperTextId, ...FormHelperTextProps } = {},
-	StaticInputLabelProps: {
-		onClick: StaticInputLabelOnClick,
-		id: StaticInputLabelId,
-		...StaticInputLabelProps
-	} = {},
-	sx,
-}: RichTextEditorProps) => {
-	const richTextEditorRef = React.useRef<Editor>(null);
+const RichTextEditor = React.forwardRef<HTMLDivElement, RichTextEditorProps>(
+	function RichTextEditor(
+		{
+			value,
+			onChange,
+			id: overridableId,
+			label,
+			required,
+			helperText,
+			onBlur,
+			onFocus,
+			disabled,
+			error,
+			margin,
+			RichTextEditorBaseProps,
+			FormHelperTextProps: {
+				id: FormHelperTextId,
+				...FormHelperTextProps
+			} = {},
+			StaticInputLabelProps: {
+				onClick: StaticInputLabelOnClick,
+				id: StaticInputLabelId,
+				...StaticInputLabelProps
+			} = {},
+			sx,
+			innerRef,
+		},
+		rootRef
+	) {
+		const richTextEditorRef = React.useRef<Editor>(null);
+		const handleRichTextEditorRef = useForkRef(richTextEditorRef, innerRef);
 
-	const focusEditor = () => richTextEditorRef.current?.focus();
+		const id = useId(overridableId);
+		const labelId = label && id ? `${id}-label` : undefined;
+		const helperTextId = helperText && id ? `${id}-helper-text` : undefined;
 
-	const id = unstable_useId(overridableId);
-	const labelId = label && id ? `${id}-label` : undefined;
-	const helperTextId = helperText && id ? `${id}-helper-text` : undefined;
+		const focusEditor = () => richTextEditorRef.current?.focus();
 
-	return (
-		<FormControl
-			required={required}
-			onBlur={onBlur}
-			onFocus={onFocus}
-			disabled={disabled}
-			error={error}
-			margin={margin}
-			sx={sx}
-		>
-			{label && (
-				<StaticInputLabel
-					onClick={callAll<React.MouseEvent<HTMLLabelElement>[], void>(
-						focusEditor,
-						StaticInputLabelOnClick
-					)}
-					id={
-						labelId && StaticInputLabelId
-							? `${labelId} ${StaticInputLabelId}`
-							: labelId || StaticInputLabelId
-					}
-					{...StaticInputLabelProps}
-				>
-					{label}
-				</StaticInputLabel>
-			)}
-			<RichTextEditorBase
-				value={value}
-				onChange={onChange}
-				id={id}
-				ref={richTextEditorRef}
-				aria-labelledby={labelId}
-				aria-describedby={helperTextId}
-				{...RichTextEditorBaseProps}
-			/>
-			{helperText && (
-				<FormHelperText
-					id={
-						helperTextId && FormHelperTextId
-							? `${helperTextId} ${FormHelperTextId}`
-							: helperTextId || FormHelperTextId
-					}
-					{...FormHelperTextProps}
-				>
-					{helperText}
-				</FormHelperText>
-			)}
-		</FormControl>
-	);
-};
+		return (
+			<FormControl
+				required={required}
+				onBlur={onBlur}
+				onFocus={onFocus}
+				disabled={disabled}
+				error={error}
+				margin={margin}
+				sx={sx}
+				ref={rootRef}
+			>
+				{label && (
+					<StaticInputLabel
+						onClick={callAll<React.MouseEvent<HTMLLabelElement>[], void>(
+							focusEditor,
+							StaticInputLabelOnClick
+						)}
+						id={
+							labelId && StaticInputLabelId
+								? `${labelId} ${StaticInputLabelId}`
+								: labelId || StaticInputLabelId
+						}
+						{...StaticInputLabelProps}
+					>
+						{label}
+					</StaticInputLabel>
+				)}
+				<RichTextEditorBase
+					value={value}
+					onChange={onChange}
+					id={id}
+					ref={handleRichTextEditorRef}
+					aria-labelledby={labelId}
+					aria-describedby={helperTextId}
+					{...RichTextEditorBaseProps}
+				/>
+				{helperText && (
+					<FormHelperText
+						id={
+							helperTextId && FormHelperTextId
+								? `${helperTextId} ${FormHelperTextId}`
+								: helperTextId || FormHelperTextId
+						}
+						{...FormHelperTextProps}
+					>
+						{helperText}
+					</FormHelperText>
+				)}
+			</FormControl>
+		);
+	}
+);
 
 export default RichTextEditor;

@@ -50,6 +50,9 @@ const Autocomplete = <
 	onChange,
 	// @ts-ignore
 	defaultValue = multiple ? [] : null,
+	// Assign same values to `Autocomplete`s with multiple selections to keep consistency. If not, fallback to theme default
+	disableCloseOnSelect = multiple || undefined,
+	filterSelectedOptions = multiple || undefined,
 	...props
 }: AutocompleteProps<
 	T,
@@ -85,6 +88,8 @@ const Autocomplete = <
 			{...props}
 			value={value}
 			multiple={multiple}
+			disableCloseOnSelect={disableCloseOnSelect}
+			filterSelectedOptions={filterSelectedOptions}
 			onChange={callAll(handleChange, onChange)}
 			renderInput={renderInput}
 		/>

@@ -3,6 +3,8 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 import createEmotionCache from '@/app/createEmotionCache';
 import theme from '@/app/theme';
@@ -25,6 +27,8 @@ if (process.env.NODE_ENV === 'development') {
 
 const clientSideEmotionCache = createEmotionCache();
 
+const queryClient = new QueryClient();
+
 const CustomApp = ({
 	Component,
 	pageProps,
@@ -38,7 +42,10 @@ const CustomApp = ({
 			<CacheProvider value={emotionCache}>
 				<ThemeProvider theme={theme}>
 					<CssBaseline />
-					<Component {...pageProps} />
+					<QueryClientProvider client={queryClient}>
+						<Component {...pageProps} />
+						<ReactQueryDevtools />
+					</QueryClientProvider>
 				</ThemeProvider>
 			</CacheProvider>
 		</>

@@ -9,7 +9,7 @@ import { unstable_useControlled as useControlled } from '@mui/utils';
 
 import callAll from '@/common/utils/callAll';
 
-export interface AutocompleteProps<
+interface AutocompleteProps<
 	T,
 	Multiple extends boolean | undefined = undefined,
 	DisableClearable extends boolean | undefined = undefined,
@@ -95,5 +95,9 @@ const Autocomplete = <
 		/>
 	);
 };
+
+export * from '@mui/material/Autocomplete';
+
+export type { AutocompleteProps };
 
 export default Autocomplete;

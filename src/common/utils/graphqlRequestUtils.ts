@@ -2,7 +2,7 @@ import { GraphQLClient } from 'graphql-request';
 
 import { getAuthToken } from './authToken';
 
-const ENDPOINT = process.env.API_ENDPOINT;
+export const ENDPOINT = process.env.API_ENDPOINT;
 
 if (!ENDPOINT) {
 	throw new Error(
@@ -25,5 +25,11 @@ const graphQLClient = new GraphQLClient(ENDPOINT, {
 		return headers;
 	},
 });
+
+const { rawRequest, request, batchRequests } = graphQLClient;
+
+export * from 'graphql-request';
+
+export { rawRequest, request, batchRequests };
 
 export default graphQLClient;

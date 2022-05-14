@@ -22,10 +22,9 @@ const graphQLClient = new GraphQLClient(ENDPOINT, {
 	},
 });
 
-const { rawRequest, request, batchRequests } = graphQLClient;
-
 export * from 'graphql-request';
-
-export { rawRequest, request, batchRequests };
+// const {request, rawRequest, batchRequests} = graphQLClient
+// export { rawRequest, request, batchRequests };
+// when trying to use request from an outside module, it just doesn't work. I get `cannot read properties of undefined (reading 'options').` However, I don't get any errors when using graphQLClient.request. I thought it had to do with this: https://github.com/swc-project/swc/issues/4064, but tried disabling reexports and it still doesn't work.  Disabling this temporarily while I figure out what's wrong whith this.
 
 export default graphQLClient;

@@ -2,15 +2,11 @@ import { GraphQLClient } from 'graphql-request';
 
 import { getAuthToken } from './authToken';
 
-export const ENDPOINT = process.env.API_ENDPOINT;
+export const ENDPOINT = process.env.NEXT_PUBLIC_API_ENDPOINT;
 
 if (!ENDPOINT) {
 	throw new Error(
-		[
-			`Can't initialize \`graphQLClient\` because \`${ENDPOINT}\` is not a valid endpoint.`,
-			'\n',
-			`Please make sure that a valid enviroment variable was defined for \`API_ENDPOINT\` and try again.`,
-		].join('')
+		`Can't initialize \`graphQLClient\` because \`${ENDPOINT}\` is not a valid endpoint. Please make sure that a valid enviroment variable was defined for \`NEXT_PUBLIC_API_ENDPOINT\` and try again.`
 	);
 }
 

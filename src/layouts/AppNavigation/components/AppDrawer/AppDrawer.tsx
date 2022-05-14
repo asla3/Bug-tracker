@@ -27,16 +27,15 @@ import { useRouter } from 'next/router';
 
 import Link from '@/common/components/Link';
 import OrganizationSwitcher from '@/common/components/OrganizationSwitcher';
-import type { Organization, Project } from '@/common/types/Data';
 import isLinkRouteActive from '@/common/utils/isLinkRouteActive';
+import { DESKTOP_SIDEBAR_START } from '@/constants';
 import {
 	getRouteToProject,
 	getRouteToOrganizationProjects,
 	getRouteToOrganizationSettings,
 	getRouteToProjectSettings,
-} from '@/routes/routes';
-
-import { DESKTOP_SIDEBAR_START } from '../../constants';
+} from '@/routes';
+import type { Organization, Project } from '@/types/api';
 
 export interface AppDrawerProps {
 	organizations: Organization[];

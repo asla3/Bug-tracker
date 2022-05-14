@@ -8,8 +8,8 @@ import MenuItem from '@mui/material/MenuItem';
 import Image from 'next/image';
 
 import Link from '@/common/components/Link';
-import type { Organization } from '@/common/types/Data';
 import { getRouteToOrganizationProjects, ORGANIZATIONS } from '@/routes/routes';
+import type { Organization } from '@/types/api';
 
 export interface OrganizationSwitcherProps
 	extends Pick<MenuProps, 'open' | 'anchorEl'> {

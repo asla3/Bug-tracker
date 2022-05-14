@@ -1,26 +1,33 @@
 import { graphql } from 'msw';
 
-const users = [
+import { ORGANIZATION_MEMBER_ROLE_OPTIONS } from '@/constants';
+import type { User, Organization, Project } from '@/types/api';
+
+const users: User[] = [
 	{ id: '1', name: 'Andrés Loreto', avatarUrl: '/favicon.ico' },
 	{ id: '2', name: 'Demo user', avatarUrl: '/favicon.ico' },
 ];
 
-const organizations = [
+const organizations: Organization[] = [
 	{
 		id: '1',
 		name: 'Vercel',
 		imageUrl: '/favicon.ico',
-		members: [{ user: users[0], role: 'admin' }],
+		members: [
+			{ user: users[0], role: ORGANIZATION_MEMBER_ROLE_OPTIONS['ADMIN'] },
+		],
 	},
 	{
 		id: '2',
 		name: 'Google',
 		imageUrl: '/favicon.ico',
-		members: [{ user: users[0], role: 'admin' }],
+		members: [
+			{ user: users[0], role: ORGANIZATION_MEMBER_ROLE_OPTIONS['ADMIN'] },
+		],
 	},
 ];
 
-const projects = [
+const projects: Project[] = [
 	{
 		id: '1',
 		name: 'Bug tracker',
@@ -29,17 +36,6 @@ const projects = [
 		organization: organizations[1],
 	},
 ];
-
-// enum TICKET_TYPE_OPTIONS {
-// 	BUG = 'Bug',
-// 	FEATURE_REQUEST = 'Feature request',
-// }
-
-// enum TICKET_PRIORITY_OPTIONS {
-// 	HIGH = 'High',
-// 	MEDIUM = 'Medium',
-// 	LOW = 'Low',
-// }
 
 // const tickets = [
 // 	{

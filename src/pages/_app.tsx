@@ -8,21 +8,14 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 
 import createEmotionCache from '@/app/createEmotionCache';
 import theme from '@/app/theme';
+import startMockingRequests from '@/mocks/startMockingRequests';
 
 interface CustomAppProps extends AppProps {
 	emotionCache?: EmotionCache;
 }
 
 if (process.env.NODE_ENV === 'development') {
-	if (typeof window === 'undefined') {
-		// eslint-disable-next-line @typescript-eslint/no-var-requires
-		const { default: server } = require('../mocks/server');
-		server.listen();
-	} else {
-		// eslint-disable-next-line @typescript-eslint/no-var-requires
-		const { default: worker } = require('../mocks/browser');
-		worker.start();
-	}
+	startMockingRequests();
 }
 
 const clientSideEmotionCache = createEmotionCache();

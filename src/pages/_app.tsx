@@ -14,13 +14,26 @@ interface CustomAppProps extends AppProps {
 	emotionCache?: EmotionCache;
 }
 
+const QUERY_MAX_RETRIES = 3;
+
 if (process.env.NODE_ENV === 'development') {
 	startMockingRequests();
 }
 
 const clientSideEmotionCache = createEmotionCache();
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+	defaultOptions: {
+		queries: {
+			retry: QUERY_MAX_RETRIES,
+			useErrorBoundary: (error, query) =>
+				query.state.data !== null &&
+				query.state.fetchFailureCount !== QUERY_MAX_RETRIES,
+			// todo: show error on toast
+			// onError:
+		},
+	},
+});
 
 const CustomApp = ({
 	Component,

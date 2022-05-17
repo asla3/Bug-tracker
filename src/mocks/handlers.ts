@@ -81,6 +81,17 @@ const handlers = [
 
 		return res(ctx.data({ organization }));
 	}),
+	graphql.mutation('Login', (req, res, ctx) => {
+		return res(ctx.data({ login: { token: 'random token', user: users[0] } }));
+	}),
+	graphql.mutation('Register', (req, res, ctx) => {
+		return res(
+			ctx.data({ register: { token: 'some random token', user: users[0] } })
+		);
+	}),
+	graphql.query('User', (req, res, ctx) => {
+		return res(ctx.data({ user: users[0] }));
+	}),
 ];
 
 export default handlers;

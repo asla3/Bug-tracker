@@ -58,8 +58,9 @@ const handlers = [
 		const { organizationId } = req.variables;
 
 		const organizationProjects =
-			projects.find((project) => project.organization.id === organizationId) ||
-			[];
+			projects.filter(
+				(project) => project.organization.id === organizationId
+			) || [];
 
 		return res(
 			ctx.data({

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
-const startMockingRequests = async () => {
+const startMockingRequests = () => {
 	if (typeof window === 'undefined') {
 		const { default: server } = require('../mocks/server');
 		server.listen();

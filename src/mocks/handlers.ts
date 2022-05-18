@@ -51,7 +51,7 @@ const projects: Project[] = [
 // ];
 
 const handlers = [
-	graphql.query('Projects', (req, res, ctx) => {
+	graphql.query('GetProjects', (req, res, ctx) => {
 		// const bearerToken = req.headers.get('Authorization');
 		// if (!bearerToken) return res(ctx.errors([{ messaged: 'Unauthorized' }]));
 
@@ -68,7 +68,7 @@ const handlers = [
 			})
 		);
 	}),
-	graphql.query('Organization', (req, res, ctx) => {
+	graphql.query('GetOrganization', (req, res, ctx) => {
 		const { id } = req.variables;
 
 		const organization = organizations.find(

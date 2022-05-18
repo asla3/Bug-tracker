@@ -89,8 +89,8 @@ const handlers = [
 			ctx.data({ register: { token: 'some random token', user: users[0] } })
 		);
 	}),
-	graphql.query('User', (req, res, ctx) => {
-		return res(ctx.data({ user: users[0] }));
+	graphql.query('GetProfile', (req, res, ctx) => {
+		return res(ctx.data({ profile: users[0] }));
 	}),
 ];
 

@@ -10,6 +10,11 @@ import type { GetKeysValue } from './utils';
 	For now types are just dummies just so we don't have a bunch of `any`s throughout the whole app. They are subject to changes as I finish the frontend.
 */
 
+export interface AuthPayload {
+	token: string;
+	user: User;
+}
+
 export interface User {
 	name: string;
 	avatarUrl: string;

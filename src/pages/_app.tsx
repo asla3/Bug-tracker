@@ -8,6 +8,7 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 
 import createEmotionCache from '@/app/createEmotionCache';
 import theme from '@/app/theme';
+import AuthProvider from '@/common/context/AuthProvider';
 import startMockingRequests from '@/mocks/startMockingRequests';
 
 interface CustomAppProps extends AppProps {
@@ -42,6 +43,7 @@ const CustomApp = ({
 }: CustomAppProps) => {
 	return (
 		<>
+			{/* todo add wrapping error boundary */}
 			<Head>
 				<meta name="viewport" content="initial-scale=1, width=device-width" />
 			</Head>
@@ -49,7 +51,9 @@ const CustomApp = ({
 				<ThemeProvider theme={theme}>
 					<CssBaseline />
 					<QueryClientProvider client={queryClient}>
-						<Component {...pageProps} />
+						<AuthProvider>
+							<Component {...pageProps} />
+						</AuthProvider>
 						<ReactQueryDevtools />
 					</QueryClientProvider>
 				</ThemeProvider>

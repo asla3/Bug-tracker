@@ -22,7 +22,7 @@ const graphQLClient = new GraphQLClient(ENDPOINT, {
 	},
 });
 
-export * from 'graphql-request';
+export { gql } from 'graphql-request';
 export { graphQLClient };
 // const {request, rawRequest, batchRequests} = graphQLClient
 // export { rawRequest, request, batchRequests };

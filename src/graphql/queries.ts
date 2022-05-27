@@ -1,6 +1,6 @@
 import { gql } from '@/common/utils/graphqlRequestUtils';
 import {
-	CORE_USER_FIELDS_FRAGMENT,
+	CORE_AUTH_USER_FIELDS_FRAGMENT,
 	CORE_ORGANIZATION_FIELDS_FRAGMENT,
 } from '@/graphql/fragments';
 
@@ -14,10 +14,10 @@ export const GET_ORGANIZATION_QUERY = gql`
 `;
 
 export const GET_PROFILE_QUERY = gql`
-	${CORE_USER_FIELDS_FRAGMENT}
+	${CORE_AUTH_USER_FIELDS_FRAGMENT}
 	query GetProfile {
 		profile {
-			...CoreUserFields
+			...CoreAuthUserFields
 		}
 	}
 `;

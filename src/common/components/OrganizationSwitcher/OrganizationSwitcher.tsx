@@ -7,9 +7,9 @@ import Menu, { MenuProps } from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Image from 'next/image';
 
+import type { Organization } from '@/api/types';
 import Link from '@/common/components/Link';
 import { getRouteToOrganizationProjects, ORGANIZATIONS } from '@/routes/routes';
-import type { Organization } from '@/types/api';
 
 export interface OrganizationSwitcherProps
 	extends Pick<MenuProps, 'open' | 'anchorEl'> {

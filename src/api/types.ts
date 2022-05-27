@@ -1,10 +1,11 @@
 import type {
-	ORGANIZATION_MEMBER_ROLE_OPTIONS,
+	MEMBERSHIP_ROLE,
 	TICKET_PRIORITY_OPTIONS,
 	TICKET_TYPE_OPTIONS,
+	MEMBERSHIP_STATUS_OPTIONS,
 } from '@/constants';
 
-import type { GetKeysValue } from './utils';
+import type { GetKeysValue } from '../types/utils';
 
 /*
 	For now types are just dummies just so we don't have a bunch of `any`s throughout the whole app. They are subject to changes as I finish the frontend.
@@ -12,7 +13,7 @@ import type { GetKeysValue } from './utils';
 
 export interface AuthPayload {
 	token: string;
-	user: User;
+	user: AuthUser;
 }
 
 export interface User {
@@ -21,21 +22,40 @@ export interface User {
 	id: string;
 }
 
+// contains private data that should just be accesible to the current signed-in user
+export interface AuthUser extends User {
+	memberships: AuthUserMembership[];
+}
+
+export interface BaseMembership {
+	id: string;
+	role: MembershipRole;
+	status: MembershipStatus;
+	invitation: Invitation;
+}
+
+export interface AuthUserMembership extends BaseMembership {
+	organization: Organization;
+}
+
+export interface OrganizationMembership extends BaseMembership {
+	user: User | null;
+}
+
+export type MembershipRole = GetKeysValue<typeof MEMBERSHIP_ROLE>;
+
+export type MembershipStatus = GetKeysValue<typeof MEMBERSHIP_STATUS_OPTIONS>;
+
+export interface Invitation {
+	email: string;
+}
+
 export interface Organization {
 	id: string;
 	name: string;
 	imageUrl: string;
-	members: OrganizationMember[];
+	memberships: OrganizationMembership[];
 }
-
-export interface OrganizationMember {
-	user: User;
-	role: OrganizationMemberRole;
-}
-
-export type OrganizationMemberRole = GetKeysValue<
-	typeof ORGANIZATION_MEMBER_ROLE_OPTIONS
->;
 
 export interface Project {
 	name: string;

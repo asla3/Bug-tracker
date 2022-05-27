@@ -1,31 +1,57 @@
 import { graphql } from 'msw';
 
-import { ORGANIZATION_MEMBER_ROLE_OPTIONS } from '@/constants';
-import type { User, Organization, Project } from '@/types/api';
+import type {
+	User,
+	Organization,
+	Project,
+	AuthUser,
+	AuthPayload,
+	BaseMembership,
+	OrganizationMembership,
+	AuthUserMembership,
+} from '@/api/types';
+import { MEMBERSHIP_ROLE, MEMBERSHIP_STATUS_OPTIONS } from '@/constants';
 
 const users: User[] = [
 	{ id: '1', name: 'Andrés Loreto', avatarUrl: '/favicon.ico' },
-	{ id: '2', name: 'Demo user', avatarUrl: '/favicon.ico' },
 ];
+
+const baseMemberships: BaseMembership[] = [
+	{
+		role: MEMBERSHIP_ROLE['ADMIN'],
+		id: '1',
+		status: MEMBERSHIP_STATUS_OPTIONS['ACTIVE'],
+		invitation: { email: 'asloretoaguero@gmail.com' },
+	},
+];
+
+const organizationMemberships: OrganizationMembership[] = baseMemberships.map(
+	(membership) => ({
+		...membership,
+		user: users[0],
+	})
+);
 
 const organizations: Organization[] = [
 	{
 		id: '1',
 		name: 'Vercel',
 		imageUrl: '/favicon.ico',
-		members: [
-			{ user: users[0], role: ORGANIZATION_MEMBER_ROLE_OPTIONS['ADMIN'] },
-		],
+		memberships: organizationMemberships,
 	},
 	{
 		id: '2',
 		name: 'Google',
 		imageUrl: '/favicon.ico',
-		members: [
-			{ user: users[0], role: ORGANIZATION_MEMBER_ROLE_OPTIONS['ADMIN'] },
-		],
+		memberships: organizationMemberships,
 	},
 ];
+
+const authUserMemberships: AuthUserMembership[] = baseMemberships.map(
+	(membership) => ({ ...membership, organization: organizations[0] })
+);
+
+const authUsers = [{ ...users[0], memberships: authUserMemberships }];
 
 const projects: Project[] = [
 	{
@@ -35,6 +61,10 @@ const projects: Project[] = [
 			'A bug tracker that allows organizations to keep track of bugs',
 		organization: organizations[1],
 	},
+];
+
+const authPayloads: AuthPayload[] = [
+	{ token: 'random token', user: authUsers[0] },
 ];
 
 // const tickets = [
@@ -57,7 +87,7 @@ const handlers = [
 
 		const { organizationId } = req.variables;
 
-		const organizationProjects =
+		const organizationProjects: Project[] =
 			projects.filter(
 				(project) => project.organization.id === organizationId
 			) || [];
@@ -71,7 +101,7 @@ const handlers = [
 	graphql.query('GetOrganization', (req, res, ctx) => {
 		const { id } = req.variables;
 
-		const organization = organizations.find(
+		const organization: Organization | undefined = organizations.find(
 			(organization) => organization.id === id
 		);
 
@@ -82,15 +112,16 @@ const handlers = [
 		return res(ctx.data({ organization }));
 	}),
 	graphql.mutation('Login', (req, res, ctx) => {
-		return res(ctx.data({ login: { token: 'random token', user: users[0] } }));
+		const authPayload = authPayloads[0];
+		return res(ctx.data({ login: authPayload }));
 	}),
 	graphql.mutation('Register', (req, res, ctx) => {
-		return res(
-			ctx.data({ register: { token: 'some random token', user: users[0] } })
-		);
+		const authPayload = authPayloads[0];
+		return res(ctx.data({ register: authPayload }));
 	}),
 	graphql.query('GetProfile', (req, res, ctx) => {
-		return res(ctx.data({ profile: users[0] }));
+		const profile: AuthUser = authUsers[0];
+		return res(ctx.data({ profile }));
 	}),
 ];
 

@@ -25,6 +25,7 @@ import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useRouter } from 'next/router';
 
+import type { Organization, Project } from '@/api/types';
 import Link from '@/common/components/Link';
 import OrganizationSwitcher from '@/common/components/OrganizationSwitcher';
 import isLinkRouteActive from '@/common/utils/isLinkRouteActive';
@@ -35,7 +36,6 @@ import {
 	getRouteToOrganizationSettings,
 	getRouteToProjectSettings,
 } from '@/routes';
-import type { Organization, Project } from '@/types/api';
 
 export interface AppDrawerProps {
 	organizations: Organization[];

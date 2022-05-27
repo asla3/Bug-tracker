@@ -1,6 +1,6 @@
 import { GraphQLClient } from 'graphql-request';
 
-import { getAuthToken } from './auth';
+import { getAuthToken } from './authToken';
 
 export const ENDPOINT = process.env.NEXT_PUBLIC_API_ENDPOINT;
 

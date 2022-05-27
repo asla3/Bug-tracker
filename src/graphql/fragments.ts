@@ -8,17 +8,44 @@ export const CORE_USER_FIELDS_FRAGMENT = gql`
 	}
 `;
 
+export const CORE_MEMBERSHIP_FIELDS_FRAGMENT = gql`
+	fragment CoreMembershipFields on Membership {
+		id
+		role
+		status
+		invitation {
+			email
+		}
+	}
+`;
+
 export const CORE_ORGANIZATION_FIELDS_FRAGMENT = gql`
+	${CORE_MEMBERSHIP_FIELDS_FRAGMENT}
 	${CORE_USER_FIELDS_FRAGMENT}
 	fragment CoreOrganizationFields on Organization {
 		id
 		name
 		imageUrl
-		members {
+		memberships {
+			...CoreMembershipFields
 			user {
 				...CoreUserFields
 			}
-			role
+		}
+	}
+`;
+
+export const CORE_AUTH_USER_FIELDS_FRAGMENT = gql`
+	${CORE_USER_FIELDS_FRAGMENT}
+	${CORE_MEMBERSHIP_FIELDS_FRAGMENT}
+	${CORE_ORGANIZATION_FIELDS_FRAGMENT}
+	fragment CoreAuthUserFields on User {
+		...CoreUserFields
+		memberships {
+			...CoreMembershipFields
+			organization {
+				...CoreOrganizationFields
+			}
 		}
 	}
 `;

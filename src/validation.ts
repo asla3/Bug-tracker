@@ -2,7 +2,10 @@ import { z } from 'zod';
 
 import {
 	REQUIRED_FIELD_ERROR_MESSAGE,
-	ORGANIZATION_MEMBER_ROLE_OPTIONS,
+	MEMBERSHIP_ROLE,
+	TICKET_PRIORITY_OPTIONS,
+	TICKET_TYPE_OPTIONS,
+	MEMBERSHIP_STATUS_OPTIONS,
 } from '@/constants';
 
 export const userSchema = z.object({
@@ -11,25 +14,43 @@ export const userSchema = z.object({
 	avatarUrl: z.string(),
 });
 
-export const authPayloadSchema = z.object({
-	token: z.string(),
-	user: userSchema,
+export const membershipRolesSchema = z.nativeEnum(MEMBERSHIP_ROLE);
+
+export const invitationSchema = z.object({
+	email: z.string().email(),
 });
 
-export const organizationMemberRolesSchema = z.nativeEnum(
-	ORGANIZATION_MEMBER_ROLE_OPTIONS
-);
+export const membershipStatusSchema = z.nativeEnum(MEMBERSHIP_STATUS_OPTIONS);
+
+export const membershipSchema = z.object({
+	id: z.string(),
+	role: membershipRolesSchema,
+	status: membershipStatusSchema,
+	invitation: invitationSchema,
+});
+
+export const organizationMembershipSchema = membershipSchema.extend({
+	user: z.nullable(userSchema),
+});
 
 export const organizationSchema = z.object({
 	id: z.string(),
 	name: z.string(),
 	imageUrl: z.string(),
-	members: z.array(
-		z.object({
-			user: userSchema,
-			role: organizationMemberRolesSchema,
-		})
-	),
+	memberships: z.array(organizationMembershipSchema),
+});
+
+export const authUserMembershipSchema = membershipSchema.extend({
+	organization: organizationSchema,
+});
+
+export const authUserSchema = userSchema.extend({
+	memberships: z.array(authUserMembershipSchema),
+});
+
+export const authPayloadSchema = z.object({
+	token: z.string(),
+	user: authUserSchema,
 });
 
 export const projectSchema = z.object({
@@ -39,23 +60,16 @@ export const projectSchema = z.object({
 	organization: organizationSchema,
 });
 
-const ticketTypeSchema = z.object({
-	id: z.string(),
-	name: z.string(),
+const ticketTypeSchema = z.nativeEnum(TICKET_TYPE_OPTIONS);
+
+export const ticketTypeAutocompleteSchema = z.nativeEnum(TICKET_TYPE_OPTIONS, {
+	invalid_type_error: REQUIRED_FIELD_ERROR_MESSAGE,
 });
 
-export const ticketTypeAutocompleteSchema = z.object(
-	{ ...ticketTypeSchema.shape },
-	{ invalid_type_error: REQUIRED_FIELD_ERROR_MESSAGE }
-);
+const ticketPrioritySchema = z.nativeEnum(TICKET_PRIORITY_OPTIONS);
 
-const ticketPrioritySchema = z.object({
-	id: z.string(),
-	name: z.string(),
-});
-
-export const ticketPriorityAutocompleteSchema = z.object(
-	{ ...ticketPrioritySchema.shape },
+export const ticketPriorityAutocompleteSchema = z.nativeEnum(
+	TICKET_PRIORITY_OPTIONS,
 	{ invalid_type_error: REQUIRED_FIELD_ERROR_MESSAGE }
 );
 

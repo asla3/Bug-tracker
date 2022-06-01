@@ -83,7 +83,7 @@ export const ticketSchema = z.object({
 	name: z.string(),
 	description: z.string(),
 	// todo: attachments: z.array(attachmentSchema),
-	assignees: z.array(userSchema),
+	assignees: z.array(organizationMembershipSchema),
 	type: ticketTypeSchema,
 	project: projectSchema,
 	priority: ticketPrioritySchema,

@@ -75,7 +75,7 @@ export const ticketPriorityAutocompleteSchema = z.nativeEnum(
 
 export const ticketPendingAttachmentSchema = z.object({
 	id: z.string(),
-	file: typeof File !== 'undefined' ? z.string() : z.any(), // `File` doesn't exist during build time so we have to check before creating the schema
+	file: typeof File !== 'undefined' ? z.instanceof(File) : z.any(), // `File` doesn't exist during build time so we have to check before creating the schema
 });
 
 export const ticketSchema = z.object({

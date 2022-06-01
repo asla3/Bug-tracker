@@ -3,17 +3,29 @@ import * as React from 'react';
 import type { UseMutateAsyncFunction } from 'react-query';
 
 import type { LoginCredentials, RegisterCredentials } from '@/api';
-import type { AuthUser, MembershipRole } from '@/api/types';
+import type {
+	AuthUser,
+	MembershipRole,
+	OrganizationMembership,
+} from '@/api/types';
 
 export interface AuthContextValues {
 	user: AuthUser | null;
-	role: MembershipRole | null;
+	isLoadingUser: boolean;
+	userError: unknown;
+	userFailureCount: number;
 	login: UseMutateAsyncFunction<AuthUser, any, LoginCredentials>;
-	logout: UseMutateAsyncFunction<any, any, void, any>;
-	register: UseMutateAsyncFunction<AuthUser, any, RegisterCredentials>;
 	isLoggingIn: boolean;
+	logout: UseMutateAsyncFunction<any, any, void, any>;
 	isLoggingOut: boolean;
+	register: UseMutateAsyncFunction<AuthUser, any, RegisterCredentials>;
 	isRegistering: boolean;
+	currentOrganizationMembership: OrganizationMembership | null;
+	currentOrganizationMembershipError: unknown;
+	currentOrganizationMembershipFailureCount: number;
+	isLoadingCurrentOrganizationMembership: boolean;
+	role: MembershipRole | null;
+	isLoading: boolean;
 }
 
 const AuthContext = React.createContext<null | AuthContextValues>(null);

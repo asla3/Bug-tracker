@@ -1,8 +1,12 @@
-import type { AuthUser, AuthPayload } from '@/api/types';
+import type { AuthUser, AuthPayload, Organization } from '@/api/types';
 import { graphQLClient } from '@/common/utils/graphqlRequestUtils';
 import { LOGIN_MUTATION, REGISTER_MUTATION } from '@/graphql/mutations';
-import { GET_PROFILE_QUERY } from '@/graphql/queries';
-import { authPayloadSchema, authUserSchema } from '@/validation';
+import { GET_PROFILE_QUERY, GET_ORGANIZATION_QUERY } from '@/graphql/queries';
+import {
+	authPayloadSchema,
+	authUserSchema,
+	organizationSchema,
+} from '@/validation';
 
 export interface LoginCredentials {
 	email: string;
@@ -42,4 +46,16 @@ export const getProfile = async () => {
 	}>(GET_PROFILE_QUERY);
 	const profile: AuthUser = await authUserSchema.parseAsync(unsafe_profile);
 	return profile;
+};
+
+export const getOrganization = async (id: string) => {
+	const { organization: unsafe_organization } = await graphQLClient.request<{
+		organization: unknown;
+	}>(GET_ORGANIZATION_QUERY, { id });
+
+	const organization: Organization = await organizationSchema.parseAsync(
+		unsafe_organization
+	);
+
+	return organization;
 };

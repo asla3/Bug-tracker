@@ -1,11 +1,13 @@
+import { z } from 'zod';
+
 import type { AuthUser, AuthPayload, Organization } from '@/api/types';
 import { graphQLClient } from '@/common/utils/graphqlRequestUtils';
 import { LOGIN_MUTATION, REGISTER_MUTATION } from '@/graphql/mutations';
 import { GET_PROFILE_QUERY, GET_ORGANIZATION_QUERY } from '@/graphql/queries';
 import {
-	authPayloadSchema,
-	authUserSchema,
 	organizationSchema,
+	authUserSchema,
+	authPayloadSchema,
 } from '@/validation';
 
 export interface LoginCredentials {
@@ -18,44 +20,53 @@ export interface RegisterCredentials {
 	password: string;
 }
 
-const validateAuthPayload = (
-	unsafe_authPayload: unknown
-): Promise<AuthPayload> => authPayloadSchema.parseAsync(unsafe_authPayload);
+const validateOrganizationResponse = z.object({
+	organization: organizationSchema,
+}).parseAsync;
+
+const validateProfileResponse = z.object({
+	profile: authUserSchema,
+}).parseAsync;
+
+const validateLoginResponse = z.object({ login: authPayloadSchema }).parseAsync;
+
+const validateRegisterResponse = z.object({
+	register: authPayloadSchema,
+}).parseAsync;
 
 export const loginWithEmailAndPassword = async (
 	credentials: LoginCredentials
-) => {
-	const { login: unsafe_authPayload } = await graphQLClient.request<{
-		login: unknown;
-	}>(LOGIN_MUTATION, credentials);
-	return await validateAuthPayload(unsafe_authPayload);
+): Promise<AuthPayload> => {
+	const response = await graphQLClient.request<unknown>(
+		LOGIN_MUTATION,
+		credentials
+	);
+	const { login: authPayload } = await validateLoginResponse(response);
+	return authPayload;
 };
 
 export const registerWithEmailAndPassword = async (
 	credentials: RegisterCredentials
-) => {
-	const { register: unsafe_authPayload } = await graphQLClient.request<{
-		register: unknown;
-	}>(REGISTER_MUTATION, credentials);
-	return await validateAuthPayload(unsafe_authPayload);
-};
-
-export const getProfile = async () => {
-	const { profile: unsafe_profile } = await graphQLClient.request<{
-		profile: unknown;
-	}>(GET_PROFILE_QUERY);
-	const profile: AuthUser = await authUserSchema.parseAsync(unsafe_profile);
-	return profile;
-};
-
-export const getOrganization = async (id: string) => {
-	const { organization: unsafe_organization } = await graphQLClient.request<{
-		organization: unknown;
-	}>(GET_ORGANIZATION_QUERY, { id });
-
-	const organization: Organization = await organizationSchema.parseAsync(
-		unsafe_organization
+): Promise<AuthPayload> => {
+	const response = await graphQLClient.request<unknown>(
+		REGISTER_MUTATION,
+		credentials
 	);
+	const { register: authPayload } = await validateRegisterResponse(response);
+	return authPayload;
+};
 
+export const getProfile = async (): Promise<AuthUser> => {
+	const response = await graphQLClient.request<unknown>(GET_PROFILE_QUERY);
+	const { profile: authUser } = await validateProfileResponse(response);
+	return authUser;
+};
+
+export const getOrganization = async (id: string): Promise<Organization> => {
+	const response = await graphQLClient.request<unknown>(
+		GET_ORGANIZATION_QUERY,
+		{ id }
+	);
+	const { organization } = await validateOrganizationResponse(response);
 	return organization;
 };

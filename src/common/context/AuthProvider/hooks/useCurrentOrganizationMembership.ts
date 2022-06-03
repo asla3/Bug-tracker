@@ -11,11 +11,11 @@ const useCurrentOrganizationMembership = (user: AuthUser | null) => {
 		Because the only way to get the current dynamic route is to access query, we have to make sure that `query.organizationId` is a string and not an array. We could be doing more to make sure that the value we're accesing is a dynamic route and not a query param (/?organizationid=1) but I' don't think it's necessary to go that far.
 	 */
 	const organizationId =
-		isReady && typeof query.organizationId === 'string'
-			? query.organizationId
-			: null;
+		typeof query.organizationId === 'string' ? query.organizationId : null;
 
 	const organizationIdIsValid = organizationId !== null;
+
+	const queryIsEnabled = isReady && organizationIdIsValid && Boolean(user);
 
 	const {
 		isLoading,
@@ -23,7 +23,7 @@ const useCurrentOrganizationMembership = (user: AuthUser | null) => {
 		data: currentOrganizationMembership = null,
 		...queryValues
 	} = useOrganization(organizationIdIsValid ? organizationId : '', {
-		enabled: organizationIdIsValid && Boolean(user),
+		enabled: queryIsEnabled,
 		select: (organization) => {
 			if (!user) {
 				throw new Error(
@@ -48,7 +48,7 @@ const useCurrentOrganizationMembership = (user: AuthUser | null) => {
 	return {
 		currentOrganizationMembership,
 		role,
-		isLoading: isLoading || isIdle,
+		isLoading: isLoading || !isReady || (queryIsEnabled && isIdle), // I think this last case should be impossible but adding it just to be sure.
 		...queryValues,
 	};
 };

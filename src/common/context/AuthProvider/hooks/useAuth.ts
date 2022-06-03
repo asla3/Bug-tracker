@@ -1,19 +1,37 @@
 import * as React from 'react';
 
-import type { AuthUser } from '@/api/types';
-
 import AuthContext, { AuthContextValues } from '../AuthContext';
-
-export interface UseAuthConfig<T extends boolean> {
-	/**
-	 * If `true`, will throw an error if `user` is null.
-	 */
-	assertUser?: T;
-}
 
 interface AuthContextValuesWithAssertedUser
 	extends Omit<AuthContextValues, 'user'> {
-	user: AuthUser;
+	user: NonNullable<AuthContextValues['user']>;
+}
+
+interface AuthContextValuesWithEverythingAsserted
+	extends Omit<
+		AuthContextValuesWithAssertedUser,
+		'currentOrganizationMembership' | 'role'
+	> {
+	currentOrganizationMembership: NonNullable<
+		AuthContextValues['currentOrganizationMembership']
+	>;
+	role: NonNullable<AuthContextValues['role']>;
+}
+
+type AssertMode = 'user' | 'everything';
+
+export interface UseAuthConfig<TAssertMode extends AssertMode | undefined> {
+	/**
+	 * Allows you to configure which values should be asserted to make
+	 * sure they're not `null`, and in case they're, an error will be thrown.
+	 * The available modes are:
+	 *
+	 * 1. `'user'`: `'user'` will be asserted.
+	 * 2. `everything`: `'user'`, `'role'`, and `'currentOrganizationMembership'` will be asserted.
+	 *
+	 * If you don't want anything to be asserted, just leave it as `undefined`.
+	 */
+	assertMode?: TAssertMode;
 }
 
 const useAuthContext = () => {
@@ -24,20 +42,43 @@ const useAuthContext = () => {
 	return context;
 };
 
-function useAuth<T extends false>(
-	options?: UseAuthConfig<T>
-): AuthContextValues;
-function useAuth<T extends true>(
-	options: UseAuthConfig<T>
-): AuthContextValuesWithAssertedUser; //todo Typescript is not enforcing that this function returns this value, might have to find a different way to type this.
-function useAuth<T extends boolean>(options?: UseAuthConfig<T>) {
-	const auth = useAuthContext();
-	const { user } = auth;
+const getAssertModeErrorMessage = (variableName: string, value: unknown) =>
+	`Found an unexpected \`${value}\` value for \`${variableName}\`.`;
 
-	if (options?.assertUser && !user) {
-		throw new Error(`\`${user}\` is not a valid user.`);
+function useAuth<TAssertMode extends AssertMode | undefined = undefined>(
+	config?: UseAuthConfig<TAssertMode>
+): TAssertMode extends 'user'
+	? AuthContextValuesWithAssertedUser
+	: TAssertMode extends 'everything'
+	? AuthContextValuesWithEverythingAsserted
+	: AuthContextValues {
+	const auth = useAuthContext();
+	const { currentOrganizationMembership, role, user } = auth;
+
+	if (
+		(config?.assertMode === 'user' || config?.assertMode === 'everything') &&
+		user === null
+	) {
+		throw new Error(getAssertModeErrorMessage('user', user));
 	}
 
+	if (config?.assertMode === 'everything' && role === null) {
+		throw new Error(getAssertModeErrorMessage('role', role));
+	}
+
+	if (
+		config?.assertMode === 'everything' &&
+		currentOrganizationMembership === null
+	) {
+		throw new Error(
+			getAssertModeErrorMessage(
+				'currentOrganizationMembership',
+				currentOrganizationMembership
+			)
+		);
+	}
+
+	//@ts-ignore - typescript is complaining because it can't infer that we're asserting values, so it thinks that `auth` is always `AuthContextValues`
 	return auth;
 }
 

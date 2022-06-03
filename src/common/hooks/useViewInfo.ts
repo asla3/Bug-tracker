@@ -5,17 +5,17 @@ export type ViewInfo = Record<
 	string | null
 >;
 
-const isValidParam = (param: unknown) => {
-	return typeof param === 'string' ? param : null;
+const isValidParam = (param: unknown, isReady: boolean) => {
+	return isReady && typeof param === 'string' ? param : null;
 };
 
 const useViewInfo = (): [ViewInfo, boolean] => {
 	const { query, isReady } = useRouter();
 
 	const viewInfo: ViewInfo = {
-		organizationId: isValidParam(query.organizationId),
-		projectId: isValidParam(query.projectId),
-		ticketId: isValidParam(query.ticketId),
+		organizationId: isValidParam(query.organizationId, isReady),
+		projectId: isValidParam(query.projectId, isReady),
+		ticketId: isValidParam(query.ticketId, isReady),
 	};
 
 	return [viewInfo, isReady];

@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import getWrongTypeMessage from '@/common/utils/getWrongTypeMessage';
+
 import AuthContext, { AuthContextValues } from '../AuthContext';
 
 interface AuthContextValuesWithAssertedUser
@@ -42,9 +44,6 @@ const useAuthContext = () => {
 	return context;
 };
 
-const getAssertModeErrorMessage = (variableName: string, value: unknown) =>
-	`Found an unexpected \`${value}\` value for \`${variableName}\`.`;
-
 function useAuth<TAssertMode extends AssertMode | undefined = undefined>(
 	config?: UseAuthConfig<TAssertMode>
 ): TAssertMode extends 'user'
@@ -59,11 +58,11 @@ function useAuth<TAssertMode extends AssertMode | undefined = undefined>(
 		(config?.assertMode === 'user' || config?.assertMode === 'everything') &&
 		user === null
 	) {
-		throw new Error(getAssertModeErrorMessage('user', user));
+		throw new Error(getWrongTypeMessage('user', user));
 	}
 
 	if (config?.assertMode === 'everything' && role === null) {
-		throw new Error(getAssertModeErrorMessage('role', role));
+		throw new Error(getWrongTypeMessage('role', role));
 	}
 
 	if (
@@ -71,7 +70,7 @@ function useAuth<TAssertMode extends AssertMode | undefined = undefined>(
 		currentOrganizationMembership === null
 	) {
 		throw new Error(
-			getAssertModeErrorMessage(
+			getWrongTypeMessage(
 				'currentOrganizationMembership',
 				currentOrganizationMembership
 			)

@@ -10,6 +10,8 @@ const shouldUseErrorBoundary = <
 >(
 	error: TError,
 	query: Query<TQueryFnData, TError, TQueryData, TQueryKey>
-) => query.state.fetchFailureCount >= QUERY_MAX_RETRIES;
+) =>
+	query.state.data === undefined &&
+	query.state.fetchFailureCount >= QUERY_MAX_RETRIES;
 
 export default shouldUseErrorBoundary;

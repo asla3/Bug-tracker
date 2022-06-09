@@ -59,11 +59,8 @@ interface AutocompleteWithRenderInputProps<
 		params: MuiAutocompleteRenderInputParams,
 		value: AutocompleteValue<T, TMultiple, TFreeSolo>
 	) => React.ReactNode;
-	inputProps?: never;
+	TextFieldProps?: never;
 }
-
-// we should be removing the props that will come from renderInput params, but I won't do that (at least for now) because I don't understand which ones are safe for the consumer to overwrite and which aren't. For now I'll let the consumer of this component overwrite the props that they want but its their responsability to make sure that Autocomplete works properly.
-export type InputProps = TextFieldProps;
 
 interface AutocompleteWithoutRenderInputProps<
 	T,
@@ -78,7 +75,7 @@ interface AutocompleteWithoutRenderInputProps<
 		TFreeSolo,
 		TChipComponent
 	> {
-	inputProps?: InputProps;
+	TextFieldProps?: TextFieldProps; // we should be removing the props that will come from renderInput params, but I won't do that (at least for now) because I don't understand which ones are safe for the consumer to overwrite and which aren't. For now I'll let the consumer of this component overwrite the props that they want but its their responsability to make sure that Autocomplete works properly.
 	renderInput?: never;
 }
 
@@ -122,7 +119,7 @@ const Autocomplete = <
 	// Assign same values to `Autocomplete`s with multiple selections to keep consistency.
 	disableCloseOnSelect = multiple || undefined,
 	filterSelectedOptions = multiple || undefined,
-	inputProps,
+	TextFieldProps,
 	...props
 }: AutocompleteProps<
 	T,
@@ -156,7 +153,7 @@ const Autocomplete = <
 			return renderInputProp(params, value);
 		}
 
-		return <TextField {...params} {...inputProps} />;
+		return <TextField {...params} {...TextFieldProps} />;
 	};
 
 	return (

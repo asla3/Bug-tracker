@@ -5,6 +5,7 @@ import MuiAutocomplete, {
 	AutocompleteProps as MuiAutocompleteProps,
 	AutocompleteRenderInputParams as MuiAutocompleteRenderInputParams,
 } from '@mui/material/Autocomplete';
+import type { ChipTypeMap } from '@mui/material/Chip';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
 import { unstable_useControlled as useControlled } from '@mui/utils';
 
@@ -13,17 +14,17 @@ import callAll from '@/common/utils/callAll';
 //	todo overwrite MUI's `value` prop so it can accept `null` as value when `disableClearable` is true.
 interface AutocompleteBaseProps<
 	T,
-	Multiple extends boolean | undefined,
-	DisableClearable extends boolean | undefined,
-	FreeSolo extends boolean | undefined,
-	ChipComponent extends React.ElementType<any>
+	TMultiple extends boolean | undefined,
+	TDisableClearable extends boolean | undefined,
+	TFreeSolo extends boolean | undefined,
+	TChipComponent extends React.ElementType<any>
 > extends Omit<
 		MuiAutocompleteProps<
 			T,
-			Multiple,
-			DisableClearable,
-			FreeSolo,
-			ChipComponent
+			TMultiple,
+			TDisableClearable,
+			TFreeSolo,
+			TChipComponent
 		>,
 		'renderInput'
 	> {}
@@ -35,77 +36,79 @@ interface AutocompleteBaseProps<
 */
 type AutocompleteValue<
 	T,
-	Multiple extends boolean | undefined,
-	FreeSolo extends boolean | undefined
-> = Multiple extends undefined | false
-	? T | null | MuiAutocompleteFreeSoloValueMapping<FreeSolo>
-	: Array<T | MuiAutocompleteFreeSoloValueMapping<FreeSolo>>;
+	TMultiple extends boolean | undefined,
+	TFreeSolo extends boolean | undefined
+> = TMultiple extends undefined | false
+	? T | null | MuiAutocompleteFreeSoloValueMapping<TFreeSolo>
+	: Array<T | MuiAutocompleteFreeSoloValueMapping<TFreeSolo>>;
 
 interface AutocompleteWithRenderInputProps<
 	T,
-	Multiple extends boolean | undefined,
-	DisableClearable extends boolean | undefined,
-	FreeSolo extends boolean | undefined,
-	ChipComponent extends React.ElementType<any>
+	TMultiple extends boolean | undefined,
+	TDisableClearable extends boolean | undefined,
+	TFreeSolo extends boolean | undefined,
+	TChipComponent extends React.ElementType<any>
 > extends AutocompleteBaseProps<
 		T,
-		Multiple,
-		DisableClearable,
-		FreeSolo,
-		ChipComponent
+		TMultiple,
+		TDisableClearable,
+		TFreeSolo,
+		TChipComponent
 	> {
 	renderInput: (
 		params: MuiAutocompleteRenderInputParams,
-		value: AutocompleteValue<T, Multiple, FreeSolo>
+		value: AutocompleteValue<T, TMultiple, TFreeSolo>
 	) => React.ReactNode;
 	inputProps?: never;
 }
 
 interface AutocompleteWithoutRenderInputProps<
 	T,
-	Multiple extends boolean | undefined,
-	DisableClearable extends boolean | undefined,
-	FreeSolo extends boolean | undefined,
-	ChipComponent extends React.ElementType<any>
+	TMultiple extends boolean | undefined,
+	TDisableClearable extends boolean | undefined,
+	TFreeSolo extends boolean | undefined,
+	TChipComponent extends React.ElementType<any>
 > extends AutocompleteBaseProps<
 		T,
-		Multiple,
-		DisableClearable,
-		FreeSolo,
-		ChipComponent
+		TMultiple,
+		TDisableClearable,
+		TFreeSolo,
+		TChipComponent
 	> {
 	inputProps?: Omit<TextFieldProps, keyof MuiAutocompleteRenderInputParams>;
 	renderInput?: never;
 }
 
+export type DefaultChipComponent = ChipTypeMap['defaultComponent'];
+
 type AutocompleteProps<
 	T,
-	Multiple extends boolean | undefined = undefined,
-	DisableClearable extends boolean | undefined = undefined,
-	FreeSolo extends boolean | undefined = undefined,
-	ChipComponent extends React.ElementType<any> = 'div'
+	TMultiple extends boolean | undefined,
+	TDisableClearable extends boolean | undefined,
+	TFreeSolo extends boolean | undefined,
+	TChipComponent extends React.ElementType<any> = DefaultChipComponent
 > =
 	| AutocompleteWithRenderInputProps<
 			T,
-			Multiple,
-			DisableClearable,
-			FreeSolo,
-			ChipComponent
+			TMultiple,
+			TDisableClearable,
+			TFreeSolo,
+			TChipComponent
 	  >
 	| AutocompleteWithoutRenderInputProps<
 			T,
-			Multiple,
-			DisableClearable,
-			FreeSolo,
-			ChipComponent
+			TMultiple,
+			TDisableClearable,
+			TFreeSolo,
+			TChipComponent
 	  >;
 
 const Autocomplete = <
 	T,
-	Multiple extends boolean | undefined = undefined,
-	DisableClearable extends boolean | undefined = undefined,
-	FreeSolo extends boolean | undefined = undefined,
-	ChipComponent extends React.ElementType<any> = 'div'
+	TMultiple extends boolean | undefined = undefined,
+	TDisableClearable extends boolean | undefined = undefined,
+	TFreeSolo extends boolean | undefined = undefined,
+	TChipComponent extends React.ElementType<any> = DefaultChipComponent
 >({
 	value: valueProp,
 	renderInput: renderInputProp,
@@ -120,10 +123,10 @@ const Autocomplete = <
 	...props
 }: AutocompleteProps<
 	T,
-	Multiple,
-	DisableClearable,
-	FreeSolo,
-	ChipComponent
+	TMultiple,
+	TDisableClearable,
+	TFreeSolo,
+	TChipComponent
 >) => {
 	const [value, setValue] = useControlled({
 		controlled: valueProp,
@@ -133,18 +136,18 @@ const Autocomplete = <
 
 	const handleChange: MuiAutocompleteProps<
 		T,
-		Multiple,
-		DisableClearable,
-		FreeSolo,
-		ChipComponent
+		TMultiple,
+		TDisableClearable,
+		TFreeSolo,
+		TChipComponent
 	>['onChange'] = (event, value) => setValue(value);
 
 	const renderInput: MuiAutocompleteProps<
 		T,
-		Multiple,
-		DisableClearable,
-		FreeSolo,
-		ChipComponent
+		TMultiple,
+		TDisableClearable,
+		TFreeSolo,
+		TChipComponent
 	>['renderInput'] = (params) => {
 		if (renderInputProp) {
 			return renderInputProp(params, value);

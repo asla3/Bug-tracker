@@ -11,17 +11,15 @@ import dynamic from 'next/dynamic';
 
 import callAll from '@/common/utils/callAll';
 
+import isEditorEmpty from './helpers/isEditorEmpty';
+
 export interface RichTextEditorBaseProps
 	// we remove `readOnly` to match mui props on using `disabled` instead.
-	extends Omit<MantineRichTextEditorProps, 'readOnly'> {
+	extends MantineRichTextEditorProps {
 	/**
 	 * If `true`, the component will indicate an error. The prop defaults to the value inherited from the parent FormControl component.
 	 */
 	error?: boolean;
-	/**
-	 * 	If `true`, the component is disabled. The prop defaults to the value inherited from the parent FormControl component.
-	 */
-	disabled?: boolean;
 }
 
 interface RefForwarderProps extends MantineRichTextEditorProps {
@@ -50,25 +48,37 @@ const DynamicMantineRichTextEditor = dynamic(
  */
 const RichTextEditorBase = React.forwardRef<Editor, RichTextEditorBaseProps>(
 	function RichTextEditorBase(
-		{ onFocus, onBlur, error, disabled, sx, ...other },
+		{ onFocus, onBlur, error, sx, onChange, ...other },
 		ref
 	) {
 		const [focused, setFocused] = React.useState(false);
 		const muiFormControl = useFormControl();
+		const theme = useTheme();
+
 		const formControlState = {
 			focused: muiFormControl ? muiFormControl.focused : focused,
-			disabled: disabled ?? muiFormControl?.disabled,
 			error: error ?? muiFormControl?.error,
 		};
 
 		const toggleFocused = () => setFocused(!focused);
 
-		const theme = useTheme();
+		const handleChange: MantineRichTextEditorProps['onChange'] = (
+			unsafe_value,
+			delta,
+			sources,
+			editor
+		) => {
+			/*
+				if the user has interacted with the rte, even when it's visibly empty, it's value will always contain html tags (when it's empty it's value will be <p><br/></p>). This is a problem because checks to determine if value is empty will never work. So instead we'll run some checks here to determine if the editor is empty (see isEditorEmpty), and if it is, we'll just pass an empty string to the onChange callback.
+			 */
+			const value = isEditorEmpty(editor) ? '' : unsafe_value;
+			onChange(value, delta, sources, editor);
+		};
 
 		return (
 			<DynamicMantineRichTextEditor
 				{...other}
-				readOnly={formControlState.disabled}
+				onChange={handleChange}
 				onFocus={callAll<React.FocusEvent<HTMLDivElement>[], void>(
 					toggleFocused,
 					muiFormControl?.onFocus,
@@ -94,6 +104,7 @@ const RichTextEditorBase = React.forwardRef<Editor, RichTextEditorBaseProps>(
 					}),
 					...sx,
 				}}
+				aria-invalid={formControlState.error}
 			/>
 		);
 	}

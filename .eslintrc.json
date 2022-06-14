@@ -15,6 +15,7 @@
 		"@typescript-eslint/ban-ts-comment": "off",
 		"@typescript-eslint/no-empty-interface": "off",
 		"@typescript-eslint/ban-types": "off",
+		"import/no-unresolved": "off", // TODO: figure out why this is not working for typescript aliases
 		"import/order": [
 			"error",
 			{

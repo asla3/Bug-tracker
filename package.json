@@ -49,5 +49,8 @@
 	},
 	"msw": {
 		"workerDirectory": "public"
+	},
+	"overrides": {
+		"@emotion/react": "$@emotion/react"
 	}
 }

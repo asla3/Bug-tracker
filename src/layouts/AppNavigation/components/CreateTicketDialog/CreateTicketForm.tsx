@@ -110,6 +110,10 @@ const CreateTicketForm = ({
 		schema: formSchema,
 	});
 
+	const { currentOrganizationMembership } = useAuth({
+		assertMode: 'everything',
+	});
+
 	useStoppableEffect(
 		(stopRunningEffect) => {
 			if (!selectedProjectId || isLoadingProjects) return;
@@ -147,10 +151,6 @@ const CreateTicketForm = ({
 			getValues,
 		]
 	);
-
-	const { currentOrganizationMembership } = useAuth({
-		assertMode: 'everything',
-	});
 
 	/* 
 		There are a few values that are required and have an initial value of `null`. Because of our schema, the form shouldn't be submitable if these values are `null`, so we don't really need to use this function to assert their value, but typescript	doesn't know this and still complains about the posibility of these values being `null`. So that's why this function exists, to act as a type guard. It'll probably never have to execute the onError callback unless either the user somehow hacks the app and tries to submit the form with a null value, or I make a change to the schema in the future and I screw up and forget to check that autocomplete values are non-nullable.

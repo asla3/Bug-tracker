@@ -5,14 +5,14 @@ const formatBytes = (bytes: number, decimals = 2) => {
 		throw new Error(`\`${decimals}\` is not a valid amount of decimals.`);
 	}
 
-	const bytesInAKilobyte = 1024;
+	const kilobyteToByte = 1024;
 	const sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 
-	const sizeIndex = Math.floor(Math.log(bytes) / Math.log(bytesInAKilobyte));
+	const sizeIndex = Math.floor(Math.log(bytes) / Math.log(kilobyteToByte));
 
 	return (
 		parseFloat(
-			(bytes / Math.pow(bytesInAKilobyte, sizeIndex)).toFixed(decimals)
+			(bytes / Math.pow(kilobyteToByte, sizeIndex)).toFixed(decimals)
 		) +
 		' ' +
 		sizes[sizeIndex]

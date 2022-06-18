@@ -73,18 +73,33 @@ export const ticketPriorityAutocompleteSchema = z.nativeEnum(
 	{ invalid_type_error: REQUIRED_FIELD_ERROR_MESSAGE }
 );
 
+export const ticketAttachmentSchema = z.object({
+	name: z.string(),
+	id: z.string(),
+	size: z.number(),
+	type: z.string(),
+	fileUrl: z.string(),
+});
+
 export const ticketPendingAttachmentSchema = z.object({
 	id: z.string(),
 	file: typeof File !== 'undefined' ? z.instanceof(File) : z.any(), // `File` doesn't exist during build time so we have to check before creating the schema
 });
 
-export const ticketSchema = z.object({
-	id: z.string(),
+const ticketBaseSchema = z.object({
 	name: z.string(),
 	description: z.string(),
-	// todo: attachments: z.array(attachmentSchema),
 	assignees: z.array(organizationMembershipSchema),
 	type: ticketTypeSchema,
 	project: projectSchema,
 	priority: ticketPrioritySchema,
+});
+
+export const ticketSchema = ticketBaseSchema.extend({
+	id: z.string(),
+	attachments: z.array(ticketAttachmentSchema),
+});
+
+export const pendingTicketSchema = ticketBaseSchema.extend({
+	attachments: z.array(ticketPendingAttachmentSchema),
 });

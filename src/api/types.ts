@@ -69,6 +69,7 @@ export interface TicketAttachment {
 	id: string;
 	size: number;
 	type: string;
+	fileUrl: string;
 }
 
 export interface TicketPendingAttachment {

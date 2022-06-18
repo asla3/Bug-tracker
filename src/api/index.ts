@@ -1,13 +1,30 @@
 import { z } from 'zod';
 
-import type { AuthUser, AuthPayload, Organization } from '@/api/types';
+import type {
+	AuthUser,
+	AuthPayload,
+	Organization,
+	Ticket,
+	PendingTicket,
+	Project,
+} from '@/api/types';
 import { graphQLClient } from '@/common/utils/graphqlRequestUtils';
-import { LOGIN_MUTATION, REGISTER_MUTATION } from '@/graphql/mutations';
-import { GET_PROFILE_QUERY, GET_ORGANIZATION_QUERY } from '@/graphql/queries';
+import {
+	LOGIN_MUTATION,
+	REGISTER_MUTATION,
+	CREATE_TICKET_MUTATION,
+} from '@/graphql/mutations';
+import {
+	GET_PROFILE_QUERY,
+	GET_ORGANIZATION_QUERY,
+	GET_PROJECTS_QUERY,
+} from '@/graphql/queries';
 import {
 	organizationSchema,
 	authUserSchema,
 	authPayloadSchema,
+	ticketSchema,
+	projectSchema,
 } from '@/validation';
 
 export interface LoginCredentials {
@@ -32,6 +49,14 @@ const validateLoginResponse = z.object({ login: authPayloadSchema }).parseAsync;
 
 const validateRegisterResponse = z.object({
 	register: authPayloadSchema,
+}).parseAsync;
+
+const validateCreateTicketResponse = z.object({
+	createTicket: ticketSchema,
+}).parseAsync;
+
+const validateProjectsResponse = z.object({
+	projects: z.array(projectSchema),
 }).parseAsync;
 
 export const loginWithEmailAndPassword = async (
@@ -69,4 +94,29 @@ export const getOrganization = async (id: string): Promise<Organization> => {
 	);
 	const { organization } = await validateOrganizationResponse(response);
 	return organization;
+};
+
+export const getProjects = async (
+	organizationId: string
+): Promise<Project[]> => {
+	const response = await graphQLClient.request<unknown>(GET_PROJECTS_QUERY, {
+		organizationId,
+	});
+
+	const { projects } = await validateProjectsResponse(response);
+
+	return projects;
+};
+
+export const createTicket = async (data: PendingTicket): Promise<Ticket> => {
+	const response = await graphQLClient.request<unknown>(
+		CREATE_TICKET_MUTATION,
+		data
+	);
+
+	const { createTicket: createdTicket } = await validateCreateTicketResponse(
+		response
+	);
+
+	return createdTicket;
 };

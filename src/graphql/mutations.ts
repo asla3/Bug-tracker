@@ -15,3 +15,25 @@ export const REGISTER_MUTATION = gql`
 		}
 	}
 `;
+
+export const CREATE_TICKET_MUTATION = gql`
+	mutation CreateTicket(
+		$project: ProjectInput
+		$name: String!
+		$assignees: AssigneeInput
+		$type: String!
+		$priority: String!
+		$attachments: [AttachmentInput]
+	) {
+		createTicket(
+			project: $project
+			name: $name
+			assignees: $assignees
+			type: $type
+			priority: $priority
+			attachments: $attachments
+		) {
+			temp
+		}
+	}
+`;

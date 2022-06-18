@@ -9,15 +9,15 @@ import Typography from '@mui/material/Typography';
 import { unstable_useId as useId } from '@mui/utils';
 
 import StaticInputLabel, {
-	StaticInputLabelProps as TStaticInputLabelProps,
+	StaticInputLabelProps,
 } from '@/common/components/StaticInputLabel';
 import callAll from '@/common/utils/callAll';
 import filterFiles from '@/common/utils/filterFiles';
+import formatBytes from '@/common/utils/formatBytes';
 import hasOwnProperty from '@/common/utils/hasOwnProperty';
+import inflect from '@/common/utils/inflect';
 
-import formatBytes from '../../helpers/formatBytes';
-
-export interface DropZoneProps {
+export interface DropZoneProps extends React.ComponentPropsWithoutRef<'div'> {
 	/**
 	 * Callback fired when a valid file is uploaded,
 	 * either by dropping it directly into the drop zone or by using the file input.
@@ -30,12 +30,11 @@ export interface DropZoneProps {
 	/**
 	 * Props spread to the `StaticInputLabel` component.
 	 */
-	StaticInputLabelProps?: TStaticInputLabelProps;
+	StaticInputLabelProps?: StaticInputLabelProps;
 	/**
 	 * Maximum file size allowed (in bytes.)
 	 */
 	maxSize?: number;
-	id?: string;
 	sx?: SxProps<Theme>;
 }
 
@@ -69,6 +68,7 @@ const DropZone = ({
 		...StaticInputLabelProps
 	} = {},
 	sx,
+	...extraProps
 }: DropZoneProps) => {
 	const [dropDepth, setDropDepth] = React.useState(0);
 	const [error, setError] = React.useState<null | string>(null);
@@ -90,6 +90,8 @@ const DropZone = ({
 	const handleFileUpload = (
 		event: React.DragEvent<HTMLDivElement> | React.ChangeEvent<HTMLInputElement>
 	) => {
+		setError(null);
+
 		const dropEvent = hasOwnProperty(event, 'dataTransfer');
 		const filesAttached = dropEvent
 			? event.dataTransfer.files
@@ -100,19 +102,20 @@ const DropZone = ({
 				maxSize,
 			}
 		);
-		const error =
-			filesFilteredOutCount && maxSize
-				? `${filesFilteredOutCount} ${
-						filesFilteredOutCount > 1 ? 'files' : 'file'
-				  } couldn't be attached because only files that are smaller or equal to ${formatBytes(
-						maxSize
-				  )} are allowed.`
-				: null;
-		setError(error);
-		// return early if no valid file was attached
+
+		if (filesFilteredOutCount > 0 && maxSize !== undefined) {
+			const inflection = inflect('file')(filesFilteredOutCount);
+			const error = `${filesFilteredOutCount} ${inflection} couldn't be attached because only files that are smaller or equal to ${formatBytes(
+				maxSize
+			)} are allowed.`;
+			setError(error);
+		}
+
+		// return if no valid file was attached.
 		if (filteredFiles.length === 0) {
 			return;
 		}
+
 		const eventType = dropEvent ? 'drop' : 'onChange';
 		onFileAttached(event, filteredFiles, eventType);
 	};
@@ -120,17 +123,15 @@ const DropZone = ({
 	const browseFiles = () => fileInputRef.current?.click();
 
 	const id = useId(overridableId);
-	const labelId = label && id ? `${id}-label` : undefined;
+	const labelId = label
+		? StaticInputLabelId || (id && `${id}-label`)
+		: undefined;
 
 	return (
-		<Box sx={sx}>
+		<Box sx={sx} {...extraProps}>
 			{label && (
 				<StaticInputLabel
-					id={
-						labelId && StaticInputLabelId
-							? `${labelId} ${StaticInputLabelId}`
-							: labelId || StaticInputLabelId
-					}
+					id={labelId}
 					focused={fileIsBeingDragged}
 					onClick={callAll<React.MouseEvent<HTMLLabelElement>[], void>(
 						browseFiles,

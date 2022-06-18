@@ -1,3 +1,5 @@
+export const MAX_ATTACHMENT_SIZE = 10485760; // 10 MB
+
 export const DESKTOP_SIDEBAR_START = 'md';
 
 export const MEMBERSHIP_ROLE = {
@@ -22,3 +24,13 @@ export const TICKET_TYPE_OPTIONS = {
 	BUG: 'Bug',
 	FEATURE_REQUEST: 'Feature request',
 } as const;
+
+/*
+	Form errors
+*/
+
+export const REQUIRED_FIELD_ERROR_MESSAGE = 'This field is required.';
+
+/*
+	Form errors end
+*/

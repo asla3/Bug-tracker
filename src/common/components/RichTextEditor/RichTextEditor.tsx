@@ -19,11 +19,11 @@ import StaticInputLabel, {
 import callAll from '@/common/utils/callAll';
 
 export interface RichTextEditorProps
-	//TODO: add support for fullwidth and sizing, and consider supporting more styling props from `FormControl`.
+	//TODO: add support for fullwidth, disabled, sizing, and consider supporting more styling props from `FormControl`.
 	extends Pick<TRichTextEditorBaseProps, 'value' | 'onChange' | 'id'>,
 		Pick<
 			FormControlProps,
-			'required' | 'margin' | 'error' | 'disabled' | 'onBlur' | 'onFocus' | 'sx'
+			'required' | 'margin' | 'error' | 'onBlur' | 'onFocus' | 'sx'
 		> {
 	/**
 	 * Content to use for the label.
@@ -68,7 +68,6 @@ const RichTextEditor = React.forwardRef<HTMLDivElement, RichTextEditorProps>(
 			helperText,
 			onBlur,
 			onFocus,
-			disabled,
 			error,
 			margin,
 			RichTextEditorBaseProps,
@@ -90,8 +89,12 @@ const RichTextEditor = React.forwardRef<HTMLDivElement, RichTextEditorProps>(
 		const handleRichTextEditorRef = useForkRef(richTextEditorRef, innerRef);
 
 		const id = useId(overridableId);
-		const labelId = label && id ? `${id}-label` : undefined;
-		const helperTextId = helperText && id ? `${id}-helper-text` : undefined;
+		const labelId = label
+			? StaticInputLabelId || (id && `${id}-label`)
+			: undefined;
+		const helperTextId = helperText
+			? FormHelperTextId || (id && `id-helper-text`)
+			: undefined;
 
 		const focusEditor = () => richTextEditorRef.current?.focus();
 
@@ -100,7 +103,6 @@ const RichTextEditor = React.forwardRef<HTMLDivElement, RichTextEditorProps>(
 				required={required}
 				onBlur={onBlur}
 				onFocus={onFocus}
-				disabled={disabled}
 				error={error}
 				margin={margin}
 				sx={sx}
@@ -112,11 +114,7 @@ const RichTextEditor = React.forwardRef<HTMLDivElement, RichTextEditorProps>(
 							focusEditor,
 							StaticInputLabelOnClick
 						)}
-						id={
-							labelId && StaticInputLabelId
-								? `${labelId} ${StaticInputLabelId}`
-								: labelId || StaticInputLabelId
-						}
+						id={labelId}
 						{...StaticInputLabelProps}
 					>
 						{label}
@@ -132,14 +130,7 @@ const RichTextEditor = React.forwardRef<HTMLDivElement, RichTextEditorProps>(
 					{...RichTextEditorBaseProps}
 				/>
 				{helperText && (
-					<FormHelperText
-						id={
-							helperTextId && FormHelperTextId
-								? `${helperTextId} ${FormHelperTextId}`
-								: helperTextId || FormHelperTextId
-						}
-						{...FormHelperTextProps}
-					>
+					<FormHelperText id={helperTextId} {...FormHelperTextProps}>
 						{helperText}
 					</FormHelperText>
 				)}

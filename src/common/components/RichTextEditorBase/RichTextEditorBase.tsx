@@ -13,9 +13,7 @@ import callAll from '@/common/utils/callAll';
 
 import isEditorEmpty from './helpers/isEditorEmpty';
 
-export interface RichTextEditorBaseProps
-	// we remove `readOnly` to match mui props on using `disabled` instead.
-	extends MantineRichTextEditorProps {
+export interface RichTextEditorBaseProps extends MantineRichTextEditorProps {
 	/**
 	 * If `true`, the component will indicate an error. The prop defaults to the value inherited from the parent FormControl component.
 	 */

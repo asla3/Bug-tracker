@@ -1,7 +1,7 @@
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
+import { nanoid } from 'nanoid';
 import { Controller, FieldPath } from 'react-hook-form';
-import { v4 as uuid } from 'uuid';
 import { z } from 'zod';
 
 import type { PendingTicket } from '@/api/types';
@@ -241,7 +241,7 @@ const CreateTicketForm = ({
 	const handleFileAttached: OnFileAttached = (event, attachedFiles) => {
 		const newAttachments = attachedFiles.map((attachedFile) => ({
 			file: attachedFile,
-			id: uuid(),
+			id: nanoid(),
 		}));
 		setAttachmentsValue((previousAttachments) => [
 			...previousAttachments,

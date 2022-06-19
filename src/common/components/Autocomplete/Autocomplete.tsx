@@ -5,7 +5,6 @@ import MuiAutocomplete, {
 	AutocompleteProps as MuiAutocompleteProps,
 	AutocompleteRenderInputParams as MuiAutocompleteRenderInputParams,
 } from '@mui/material/Autocomplete';
-import type { ChipTypeMap } from '@mui/material/Chip';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
 import { unstable_useControlled as useControlled } from '@mui/utils';
 
@@ -16,16 +15,9 @@ interface AutocompleteBaseProps<
 	T,
 	TMultiple extends boolean | undefined,
 	TDisableClearable extends boolean | undefined,
-	TFreeSolo extends boolean | undefined,
-	TChipComponent extends React.ElementType<any>
+	TFreeSolo extends boolean | undefined
 > extends Omit<
-		MuiAutocompleteProps<
-			T,
-			TMultiple,
-			TDisableClearable,
-			TFreeSolo,
-			TChipComponent
-		>,
+		MuiAutocompleteProps<T, TMultiple, TDisableClearable, TFreeSolo>,
 		'renderInput'
 	> {}
 
@@ -46,15 +38,8 @@ interface AutocompleteWithRenderInputProps<
 	T,
 	TMultiple extends boolean | undefined,
 	TDisableClearable extends boolean | undefined,
-	TFreeSolo extends boolean | undefined,
-	TChipComponent extends React.ElementType<any>
-> extends AutocompleteBaseProps<
-		T,
-		TMultiple,
-		TDisableClearable,
-		TFreeSolo,
-		TChipComponent
-	> {
+	TFreeSolo extends boolean | undefined
+> extends AutocompleteBaseProps<T, TMultiple, TDisableClearable, TFreeSolo> {
 	renderInput: (
 		params: MuiAutocompleteRenderInputParams,
 		value: AutocompleteValue<T, TMultiple, TFreeSolo>
@@ -66,49 +51,31 @@ interface AutocompleteWithoutRenderInputProps<
 	T,
 	TMultiple extends boolean | undefined,
 	TDisableClearable extends boolean | undefined,
-	TFreeSolo extends boolean | undefined,
-	TChipComponent extends React.ElementType<any>
-> extends AutocompleteBaseProps<
-		T,
-		TMultiple,
-		TDisableClearable,
-		TFreeSolo,
-		TChipComponent
-	> {
+	TFreeSolo extends boolean | undefined
+> extends AutocompleteBaseProps<T, TMultiple, TDisableClearable, TFreeSolo> {
 	TextFieldProps?: TextFieldProps; // we should be removing the props that will come from renderInput params, but I won't do that (at least for now) because I don't understand which ones are safe for the consumer to overwrite and which aren't. For now I'll let the consumer of this component overwrite the props that they want but its their responsability to make sure that Autocomplete works properly.
 	renderInput?: never;
 }
-
-export type DefaultChipComponent = ChipTypeMap['defaultComponent'];
 
 type AutocompleteProps<
 	T,
 	TMultiple extends boolean | undefined,
 	TDisableClearable extends boolean | undefined,
-	TFreeSolo extends boolean | undefined,
-	TChipComponent extends React.ElementType<any> = DefaultChipComponent
+	TFreeSolo extends boolean | undefined
 > =
-	| AutocompleteWithRenderInputProps<
-			T,
-			TMultiple,
-			TDisableClearable,
-			TFreeSolo,
-			TChipComponent
-	  >
+	| AutocompleteWithRenderInputProps<T, TMultiple, TDisableClearable, TFreeSolo>
 	| AutocompleteWithoutRenderInputProps<
 			T,
 			TMultiple,
 			TDisableClearable,
-			TFreeSolo,
-			TChipComponent
+			TFreeSolo
 	  >;
 
 const Autocomplete = <
 	T,
 	TMultiple extends boolean | undefined = undefined,
 	TDisableClearable extends boolean | undefined = undefined,
-	TFreeSolo extends boolean | undefined = undefined,
-	TChipComponent extends React.ElementType<any> = DefaultChipComponent
+	TFreeSolo extends boolean | undefined = undefined
 >({
 	value: valueProp,
 	renderInput: renderInputProp,
@@ -121,13 +88,7 @@ const Autocomplete = <
 	filterSelectedOptions = multiple || undefined,
 	TextFieldProps,
 	...props
-}: AutocompleteProps<
-	T,
-	TMultiple,
-	TDisableClearable,
-	TFreeSolo,
-	TChipComponent
->) => {
+}: AutocompleteProps<T, TMultiple, TDisableClearable, TFreeSolo>) => {
 	const [value, setValue] = useControlled({
 		controlled: valueProp,
 		default: defaultValue,
@@ -138,16 +99,14 @@ const Autocomplete = <
 		T,
 		TMultiple,
 		TDisableClearable,
-		TFreeSolo,
-		TChipComponent
+		TFreeSolo
 	>['onChange'] = (event, value) => setValue(value);
 
 	const renderInput: MuiAutocompleteProps<
 		T,
 		TMultiple,
 		TDisableClearable,
-		TFreeSolo,
-		TChipComponent
+		TFreeSolo
 	>['renderInput'] = (params) => {
 		if (renderInputProp) {
 			return renderInputProp(params, value);

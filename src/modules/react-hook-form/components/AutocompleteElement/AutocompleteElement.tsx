@@ -7,7 +7,6 @@ import Autocomplete, {
 	AutocompleteProps,
 	AutocompleteRenderInputParams,
 	AutocompleteValue,
-	DefaultChipComponent,
 } from '@/common/components/Autocomplete';
 import callAll from '@/common/utils/callAll';
 
@@ -18,16 +17,9 @@ interface AutocompleteElementBaseProps<
 	TMultiple extends boolean | undefined,
 	TDisableClearable extends boolean | undefined,
 	TFreeSolo extends boolean | undefined,
-	TChipComponent extends React.ElementType<any>,
 	TFieldValues extends FieldValues
 > extends Omit<
-			AutocompleteProps<
-				T,
-				TMultiple,
-				TDisableClearable,
-				TFreeSolo,
-				TChipComponent
-			>,
+			AutocompleteProps<T, TMultiple, TDisableClearable, TFreeSolo>,
 			'defaultValue' | 'renderInput' | 'TextFieldProps'
 		>,
 		ElementsBaseProps<TFieldValues> {}
@@ -44,14 +36,12 @@ interface AutocompleteElementWithRenderInputProps<
 	TMultiple extends boolean | undefined,
 	TDisableClearable extends boolean | undefined,
 	TFreeSolo extends boolean | undefined,
-	TChipComponent extends React.ElementType<any>,
 	TFieldValues extends FieldValues
 > extends AutocompleteElementBaseProps<
 		T,
 		TMultiple,
 		TDisableClearable,
 		TFreeSolo,
-		TChipComponent,
 		TFieldValues
 	> {
 	renderInput: (
@@ -66,14 +56,12 @@ interface AutocompleteElementWithoutRenderInputProps<
 	TMultiple extends boolean | undefined,
 	TDisableClearable extends boolean | undefined,
 	TFreeSolo extends boolean | undefined,
-	TChipComponent extends React.ElementType<any>,
 	TFieldValues extends FieldValues
 > extends AutocompleteElementBaseProps<
 		T,
 		TMultiple,
 		TDisableClearable,
 		TFreeSolo,
-		TChipComponent,
 		TFieldValues
 	> {
 	TextFieldProps?: TextFieldProps;
@@ -85,7 +73,6 @@ export type AutocompleteElementProps<
 	TMultiple extends boolean | undefined,
 	TDisableClearable extends boolean | undefined,
 	TFreeSolo extends boolean | undefined,
-	TChipComponent extends React.ElementType<any> = DefaultChipComponent,
 	TFieldValues extends FieldValues = FieldValues
 > =
 	| AutocompleteElementWithRenderInputProps<
@@ -93,7 +80,6 @@ export type AutocompleteElementProps<
 			TMultiple,
 			TDisableClearable,
 			TFreeSolo,
-			TChipComponent,
 			TFieldValues
 	  >
 	| AutocompleteElementWithoutRenderInputProps<
@@ -101,7 +87,6 @@ export type AutocompleteElementProps<
 			TMultiple,
 			TDisableClearable,
 			TFreeSolo,
-			TChipComponent,
 			TFieldValues
 	  >;
 
@@ -110,7 +95,6 @@ const AutocompleteElement = <
 	TMultiple extends boolean | undefined = undefined,
 	TDisableClearable extends boolean | undefined = undefined,
 	TFreeSolo extends boolean | undefined = undefined,
-	TChipComponent extends React.ElementType<any> = DefaultChipComponent,
 	TFieldValues extends FieldValues = FieldValues
 >({
 	name,
@@ -129,7 +113,6 @@ const AutocompleteElement = <
 	TMultiple,
 	TDisableClearable,
 	TFreeSolo,
-	TChipComponent,
 	TFieldValues
 >) => {
 	return (

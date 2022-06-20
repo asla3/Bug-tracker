@@ -10,6 +10,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 
 import type { PendingTicket, Ticket } from '@/api/types';
 import Dialog, { DialogProps } from '@/common/components/Dialog';
+import toast from '@/modules/toast';
 
 import useCreateTicketMutation from '../../hooks/useCreateTicketMutation';
 import CreateTicketForm from './CreateTicketForm';
@@ -53,8 +54,9 @@ const CreateTicketDialog = ({
 	const handleSubmit = (pendingTicket: PendingTicket) => {
 		createTicket(pendingTicket, {
 			onSuccess: (createdTicket) => {
-				//todo show success toast
 				onCreate?.(createdTicket, dialogShouldStayOpen);
+
+				toast.success('Ticket created succesfully');
 
 				resetCreateTicketMutation();
 			},

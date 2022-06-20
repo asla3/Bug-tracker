@@ -12,9 +12,8 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
 import Link from '@/common/components/Link';
+import { DESKTOP_SIDEBAR_START } from '@/constants';
 import { PROFILE, LOGOUT } from '@/routes';
-
-import { DESKTOP_SIDEBAR_START } from '../../constants';
 
 export interface AppBarProps {
 	/**

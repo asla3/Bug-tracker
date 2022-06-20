@@ -14,6 +14,7 @@ import AuthProvider from '@/common/context/AuthProvider';
 import startMockingRequests from '@/mocks/startMockingRequests';
 import { ErrorBoundary } from '@/modules/error-boundary';
 import { getQueryClient } from '@/modules/react-query';
+import { Toaster } from '@/modules/toast';
 
 if (process.env.NODE_ENV === 'development') {
 	startMockingRequests();
@@ -47,6 +48,7 @@ const App = ({
 						</Hydrate>
 						<ReactQueryDevtools />
 					</QueryClientProvider>
+					<Toaster />
 				</ThemeProvider>
 			</CacheProvider>
 		</ErrorBoundary>

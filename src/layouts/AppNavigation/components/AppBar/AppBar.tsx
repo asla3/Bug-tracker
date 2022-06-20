@@ -12,6 +12,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
 import Link from '@/common/components/Link';
+import { useAuth } from '@/common/context/AuthProvider';
 import { DESKTOP_SIDEBAR_START } from '@/constants';
 import { PROFILE, LOGOUT } from '@/routes';
 
@@ -29,7 +30,10 @@ export interface AppBarProps {
 const AppBar = ({ sx, openDrawer }: AppBarProps) => {
 	const [accountMenuAnchorEl, setAccountMenuAnchorEl] =
 		React.useState<null | HTMLElement>(null);
+
 	const accountMenuIsOpen = Boolean(accountMenuAnchorEl);
+
+	const { user } = useAuth({ assertMode: 'user' });
 
 	const openAccountMenu = (event: React.MouseEvent<HTMLElement>) =>
 		setAccountMenuAnchorEl(event.currentTarget);
@@ -62,7 +66,7 @@ const AppBar = ({ sx, openDrawer }: AppBarProps) => {
 					onClick={openAccountMenu}
 					color="inherit"
 				>
-					<Avatar />
+					<Avatar src={user.avatarUrl} />
 				</IconButton>
 				<Menu
 					open={accountMenuIsOpen}
@@ -80,8 +84,7 @@ const AppBar = ({ sx, openDrawer }: AppBarProps) => {
 						href={PROFILE}
 					>
 						<span>
-							Signed in as <b>user email</b>
-							{/* user is probably gonna be in context, so we'll access it later to plug the user email here */}
+							Signed in as <b>{user.name}</b>
 						</span>
 					</MenuItem>
 					<MenuItem

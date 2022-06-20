@@ -38,7 +38,7 @@
 		"react-hooks/exhaustive-deps": [
 			"warn",
 			{
-				"additionalHooks": "(useStoppableEffect|useEventCallback)"
+				"additionalHooks": "(useStoppableEffect)"
 			}
 		]
 	}

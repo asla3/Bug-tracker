@@ -14,11 +14,7 @@ const useProjects = <TData = Project[]>(
 	organizationId: string,
 	options?: UseProjectsOptions<TData>
 ) => {
-	return useQuery(
-		projectKeys.single(organizationId),
-		() => getProjects(organizationId),
-		options
-	);
+	return useQuery(projectKeys.all, () => getProjects(organizationId), options);
 };
 
 export default useProjects;

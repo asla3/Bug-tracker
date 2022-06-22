@@ -10,7 +10,7 @@ export interface UseOrganizationOptions<TData = Organization>
 		'queryKey' | 'queryFn'
 	> {}
 
-const useOrganization = <TData>(
+const useOrganization = <TData = Organization>(
 	id: string,
 	options?: UseOrganizationOptions<TData>
 ) => {

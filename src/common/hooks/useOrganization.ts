@@ -2,7 +2,7 @@ import { useQuery, UseQueryOptions } from 'react-query';
 
 import { getOrganization } from '@/api';
 import type { Organization } from '@/api/types';
-import { queryKeysFactory } from '@/modules/react-query';
+import { organizationKeys } from '@/modules/react-query';
 
 export interface UseOrganizationOptions<TData = Organization>
 	extends Omit<
@@ -15,7 +15,7 @@ const useOrganization = <TData>(
 	options?: UseOrganizationOptions<TData>
 ) => {
 	return useQuery(
-		queryKeysFactory.organization(id),
+		organizationKeys.single(id),
 		() => getOrganization(id),
 		options
 	);

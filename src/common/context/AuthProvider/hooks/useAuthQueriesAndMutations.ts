@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 
 import type { AuthUser } from '@/api/types';
-import { queryKeysFactory } from '@/modules/react-query';
+import { authUserKeys } from '@/modules/react-query';
 
 import {
 	loadUser,
@@ -13,7 +13,7 @@ import shouldUseErrorBoundary from '../utils/shouldUseErrorBoundary';
 
 const useAuthQueriesAndMutations = () => {
 	const { data = null, ...queryValues } = useQuery(
-		queryKeysFactory.authUser,
+		authUserKeys.currentUser,
 		loadUser,
 		{
 			useErrorBoundary: shouldUseErrorBoundary,
@@ -23,7 +23,7 @@ const useAuthQueriesAndMutations = () => {
 	const queryClient = useQueryClient();
 
 	const setUser = (user: AuthUser) => {
-		queryClient.setQueryData(queryKeysFactory.authUser, user);
+		queryClient.setQueryData(authUserKeys.currentUser, user);
 	};
 
 	const loginMutation = useMutation(loginUser, {

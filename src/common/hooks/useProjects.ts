@@ -2,7 +2,7 @@ import { useQuery, UseQueryOptions } from 'react-query';
 
 import { getProjects } from '@/api';
 import type { Project } from '@/api/types';
-import { queryKeysFactory } from '@/modules/react-query';
+import { projectKeys } from '@/modules/react-query';
 
 export interface UseProjectsOptions<TData = Project[]>
 	extends Omit<
@@ -15,7 +15,7 @@ const useProjects = <TData = Project[]>(
 	options?: UseProjectsOptions<TData>
 ) => {
 	return useQuery(
-		queryKeysFactory.projects(organizationId),
+		projectKeys.single(organizationId),
 		() => getProjects(organizationId),
 		options
 	);

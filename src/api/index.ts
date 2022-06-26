@@ -18,6 +18,7 @@ import {
 	GET_PROFILE_QUERY,
 	GET_ORGANIZATION_QUERY,
 	GET_PROJECTS_QUERY,
+	GET_ORGANIZATIONS_QUERY,
 } from '@/graphql/queries';
 import {
 	organizationSchema,
@@ -39,6 +40,10 @@ export interface RegisterCredentials {
 
 const validateOrganizationResponse = z.object({
 	organization: organizationSchema,
+}).parseAsync;
+
+const validateOrganizationsResponse = z.object({
+	organizations: z.array(organizationSchema),
 }).parseAsync;
 
 const validateProfileResponse = z.object({
@@ -94,6 +99,14 @@ export const getOrganization = async (id: string): Promise<Organization> => {
 	);
 	const { organization } = await validateOrganizationResponse(response);
 	return organization;
+};
+
+export const getOrganizations = async (): Promise<Organization[]> => {
+	const response = await graphQLClient.request<unknown>(
+		GET_ORGANIZATIONS_QUERY
+	);
+	const { organizations } = await validateOrganizationsResponse(response);
+	return organizations;
 };
 
 export const getProjects = async (

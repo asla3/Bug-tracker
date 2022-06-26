@@ -8,6 +8,14 @@ export const GET_ORGANIZATION_QUERY = gql`
 	}
 `;
 
+export const GET_ORGANIZATIONS_QUERY = gql`
+	query GetOrganizations {
+		organizations {
+			temp
+		}
+	}
+`;
+
 export const GET_PROFILE_QUERY = gql`
 	query GetProfile {
 		profile {

@@ -1,54 +1,47 @@
-import * as React from 'react';
-
+import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
+import ListItem from '@mui/material/ListItem';
 import Menu, { MenuProps } from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Image from 'next/image';
 
-import type { Organization } from '@/api/types';
-import Link from '@/common/components/Link';
-import { getRouteToOrganizationProjects, ORGANIZATIONS } from '@/routes/routes';
+import ListItemLinkButton from '@/common/components/ListItemLinkButton';
+import { ErrorBoundary } from '@/modules/error-boundary';
+import { ORGANIZATIONS } from '@/routes';
+
+import OrganizationsList from './OrganizationsList';
 
 export interface OrganizationSwitcherProps
-	extends Pick<MenuProps, 'open' | 'anchorEl'> {
-	organizations: Organization[];
+	extends Pick<MenuProps, 'open' | 'anchorEl' | 'id'> {
 	onClose: () => void;
+	/**
+	 * If `true`, the current organization will be displayed inside the lists of organizations for the user to switch to.
+	 * @default false
+	 */
+	showCurrentOrganization?: boolean;
 }
 
 const OrganizationSwitcher = ({
-	organizations,
 	open,
 	onClose,
 	anchorEl,
+	id,
+	showCurrentOrganization = false,
 }: OrganizationSwitcherProps) => {
 	return (
-		<Menu open={open} onClose={onClose} anchorEl={anchorEl}>
-			{organizations.map(({ id, imageUrl, name }) => (
-				<MenuItem
-					component={Link}
-					onClick={onClose}
-					href={getRouteToOrganizationProjects({ organizationId: id })}
-					key={id}
-					noLinkStyle
-				>
-					<ListItemIcon>
-						{/* TODO: add height and witdh properties. These are just temporal values */}
-						<Image src={imageUrl} alt="" width={50} height={50} />
-					</ListItemIcon>
-					<ListItemText sx={{ marginLeft: 2 }}>{name}</ListItemText>
-				</MenuItem>
-			))}
-			<Divider />
-			<MenuItem
-				component={Link}
-				href={ORGANIZATIONS}
-				onClick={onClose}
-				noLinkStyle
-			>
-				View all organizations
-			</MenuItem>
+		<Menu id={id} open={open} onClose={onClose} anchorEl={anchorEl}>
+			<Box sx={{ maxHeight: 200, overflowY: 'auto' }} component="li">
+				<ErrorBoundary>
+					<OrganizationsList
+						onOrganizationSelect={onClose}
+						showCurrentOrganization={showCurrentOrganization}
+					/>
+				</ErrorBoundary>
+			</Box>
+			<Divider component="li" />
+			<ListItem disablePadding onClick={onClose}>
+				<ListItemLinkButton href={ORGANIZATIONS}>
+					Go to my organizations
+				</ListItemLinkButton>
+			</ListItem>
 		</Menu>
 	);
 };

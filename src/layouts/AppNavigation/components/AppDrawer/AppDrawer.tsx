@@ -68,65 +68,69 @@ const AppDrawer = ({
 			]}
 		>
 			<ErrorBoundary>
-				<OrganizationHeader currentOrganizationId={currentOrganizationId} />
-			</ErrorBoundary>
-			<Divider />
-			<List>
-				<ListItem sx={{ display: 'block' }} disablePadding>
-					<Box sx={{ display: 'flex', alignItems: 'center' }}>
-						<ListItemLinkButton
-							href={getRouteToOrganizationProjects({
-								organizationId: currentOrganizationId,
-							})}
-							sx={{
-								flex: 1,
-							}}
-						>
-							<ListItemIcon>
-								<ArticleIcon />
-							</ListItemIcon>
-							<ListItemText>Projects</ListItemText>
-						</ListItemLinkButton>
-						<IconButton
-							onClick={toggleProjects}
-							aria-label={
-								projectsExpanded ? 'Hide all projects' : 'Show all projects'
-							}
-							sx={{ flexGrow: 0, flexShrink: 0 }}
-							aria-controls={PROJECTS_LIST_EXPANDABLE_CONTAINER_ID}
-							aria-expanded={projectsExpanded}
-						>
-							{projectsExpanded ? <ExpandLess /> : <ExpandMore />}
-						</IconButton>
-					</Box>
-					<Collapse
-						id={PROJECTS_LIST_EXPANDABLE_CONTAINER_ID}
-						in={projectsExpanded}
-						timeout="auto"
-						aria-hidden={!projectsExpanded}
-					>
-						<ErrorBoundary>
-							<ProjectsList
-								currentOrganizationId={currentOrganizationId}
-								mobileDrawerEnabled={mobileDrawerEnabled}
-							/>
-						</ErrorBoundary>
-					</Collapse>
-				</ListItem>
+				<ErrorBoundary>
+					<OrganizationHeader currentOrganizationId={currentOrganizationId} />
+				</ErrorBoundary>
 				<Divider />
-				<ListItem disablePadding>
-					<ListItemLinkButton
-						href={getRouteToOrganizationSettings({
-							organizationId: currentOrganizationId,
-						})}
-					>
-						<ListItemIcon>
-							<SettingsOutlinedIcon />
-						</ListItemIcon>
-						<ListItemText>Organization settings</ListItemText>
-					</ListItemLinkButton>
-				</ListItem>
-			</List>
+				<ErrorBoundary>
+					<List>
+						<ListItem sx={{ display: 'block' }} disablePadding>
+							<Box sx={{ display: 'flex', alignItems: 'center' }}>
+								<ListItemLinkButton
+									href={getRouteToOrganizationProjects({
+										organizationId: currentOrganizationId,
+									})}
+									sx={{
+										flex: 1,
+									}}
+								>
+									<ListItemIcon>
+										<ArticleIcon />
+									</ListItemIcon>
+									<ListItemText>Projects</ListItemText>
+								</ListItemLinkButton>
+								<IconButton
+									onClick={toggleProjects}
+									aria-label={
+										projectsExpanded ? 'Hide all projects' : 'Show all projects'
+									}
+									sx={{ flexGrow: 0, flexShrink: 0 }}
+									aria-controls={PROJECTS_LIST_EXPANDABLE_CONTAINER_ID}
+									aria-expanded={projectsExpanded}
+								>
+									{projectsExpanded ? <ExpandLess /> : <ExpandMore />}
+								</IconButton>
+							</Box>
+							<Collapse
+								id={PROJECTS_LIST_EXPANDABLE_CONTAINER_ID}
+								in={projectsExpanded}
+								timeout="auto"
+								aria-hidden={!projectsExpanded}
+							>
+								<ErrorBoundary>
+									<ProjectsList
+										currentOrganizationId={currentOrganizationId}
+										mobileDrawerEnabled={mobileDrawerEnabled}
+									/>
+								</ErrorBoundary>
+							</Collapse>
+						</ListItem>
+						<Divider />
+						<ListItem disablePadding>
+							<ListItemLinkButton
+								href={getRouteToOrganizationSettings({
+									organizationId: currentOrganizationId,
+								})}
+							>
+								<ListItemIcon>
+									<SettingsOutlinedIcon />
+								</ListItemIcon>
+								<ListItemText>Organization settings</ListItemText>
+							</ListItemLinkButton>
+						</ListItem>
+					</List>
+				</ErrorBoundary>
+			</ErrorBoundary>
 		</Drawer>
 	);
 };

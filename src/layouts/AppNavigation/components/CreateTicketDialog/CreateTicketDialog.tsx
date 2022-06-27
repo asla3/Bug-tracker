@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import LoadingButton from '@mui/lab/LoadingButton';
-import Button from '@mui/material/Button';
+import Button, { ButtonProps } from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -10,6 +10,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 
 import type { PendingTicket, Ticket } from '@/api/types';
 import Dialog, { DialogProps } from '@/common/components/Dialog';
+import { ErrorBoundary, ErrorFallback } from '@/modules/error-boundary';
 import toast from '@/modules/toast';
 
 import useCreateTicketMutation from '../../hooks/useCreateTicketMutation';
@@ -23,9 +24,17 @@ export interface CreateTicketDialogProps extends Pick<DialogProps, 'open'> {
 	onCreate?: (ticket: Ticket, dialogShouldStayOpen: boolean) => void;
 }
 
+type DiscardButtonProps = Omit<ButtonProps, 'color' | 'children'>;
+
 const CREATE_TICKET_FORM_ID = 'create-ticket-form';
 
 const DIALOG_LABEL_ID = 'create-ticket-dialog-label';
+
+const DiscardButton = (props: DiscardButtonProps) => (
+	<Button color="inherit" {...props}>
+		Discard
+	</Button>
+);
 
 const CreateTicketDialog = ({
 	organizationId,
@@ -71,42 +80,52 @@ const CreateTicketDialog = ({
 			aria-labelledby={DIALOG_LABEL_ID}
 		>
 			<DialogTitle id={DIALOG_LABEL_ID}>Create Ticket</DialogTitle>
-			<CreateTicketFormErrorBanner
-				onClose={resetCreateTicketMutation} // reset mutation error on close
-				error={ticketCreationError}
-			/>
-			<DialogContent>
-				<CreateTicketForm
-					id={CREATE_TICKET_FORM_ID}
-					organizationId={organizationId}
-					selectedProjectId={selectedProjectId}
-					onSubmit={handleSubmit}
-					resetOnSubmit={dialogShouldStayOpen}
+			<ErrorBoundary
+				FallbackComponent={({ error, resetErrorBoundary }) => (
+					<>
+						<DialogContent>
+							<ErrorFallback
+								error={error}
+								resetErrorBoundary={resetErrorBoundary}
+							/>
+						</DialogContent>
+						<DialogActions>
+							<DiscardButton onClick={handleDiscard} />
+						</DialogActions>
+					</>
+				)}
+			>
+				<CreateTicketFormErrorBanner
+					onClose={resetCreateTicketMutation} // reset mutation error on close
+					error={ticketCreationError}
 				/>
-			</DialogContent>
-			<DialogActions>
-				<FormControlLabel
-					checked={dialogShouldStayOpen}
-					control={<Checkbox />}
-					label="Create another ticket"
-					onChange={toggleKeepOpen}
-					sx={{ marginRight: 'auto' }}
-				/>
-				<Button
-					color="inherit"
-					disabled={isCreatingTicket}
-					onClick={handleDiscard}
-				>
-					Discard
-				</Button>
-				<LoadingButton
-					type="submit"
-					form={CREATE_TICKET_FORM_ID}
-					loading={isCreatingTicket}
-				>
-					Create
-				</LoadingButton>
-			</DialogActions>
+				<DialogContent>
+					<CreateTicketForm
+						id={CREATE_TICKET_FORM_ID}
+						organizationId={organizationId}
+						selectedProjectId={selectedProjectId}
+						onSubmit={handleSubmit}
+						resetOnSubmit={dialogShouldStayOpen}
+					/>
+				</DialogContent>
+				<DialogActions>
+					<FormControlLabel
+						checked={dialogShouldStayOpen}
+						control={<Checkbox />}
+						label="Create another ticket"
+						onChange={toggleKeepOpen}
+						sx={{ marginRight: 'auto' }}
+					/>
+					<DiscardButton disabled={isCreatingTicket} onClick={handleDiscard} />
+					<LoadingButton
+						type="submit"
+						form={CREATE_TICKET_FORM_ID}
+						loading={isCreatingTicket}
+					>
+						Create
+					</LoadingButton>
+				</DialogActions>
+			</ErrorBoundary>
 		</Dialog>
 	);
 };

@@ -63,11 +63,11 @@ const CreateTicketDialog = ({
 	const handleSubmit = (pendingTicket: PendingTicket) => {
 		createTicket(pendingTicket, {
 			onSuccess: (createdTicket) => {
-				onCreate?.(createdTicket, dialogShouldStayOpen);
-
 				toast.success('Ticket created succesfully');
 
 				resetCreateTicketMutation();
+
+				onCreate?.(createdTicket, dialogShouldStayOpen);
 			},
 		});
 	};

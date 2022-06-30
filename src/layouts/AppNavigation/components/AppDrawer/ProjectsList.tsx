@@ -16,6 +16,8 @@ import useProjects from '@/common/hooks/useProjects';
 import assertIsNonNullable from '@/common/utils/assertIsNonNullable';
 import { getRouteToProject, getRouteToProjectSettings } from '@/routes';
 
+import useCreateTicketDialogHandlers from '../../hooks/useCreateTicketDialogHandlers';
+
 export interface ProjectsListProps {
 	currentOrganizationId: string;
 	mobileDrawerEnabled: boolean;
@@ -35,8 +37,13 @@ const ProjectsList = ({
 		currentOrganizationId
 	);
 
+	const { openCreateTicketDialog } = useCreateTicketDialogHandlers();
+
 	const getHoveredProjectUpdater = (projectId: string | null) => () =>
 		setHoveredProjectId(projectId);
+
+	const getCreateTicketForProjectHandler = (projectId: string) => () =>
+		openCreateTicketDialog(projectId);
 
 	if (isLoadingProjects) {
 		return <CircularProgress aria-label="loading projects" />;
@@ -56,9 +63,7 @@ const ProjectsList = ({
 						onMouseEnter={getHoveredProjectUpdater(project.id)}
 						onMouseLeave={getHoveredProjectUpdater(null)}
 						sx={{
-							/*
-										Defining a minHeight to accomodate enough height for the actions to prevent weird shifts
-									*/
+							// Defining a minHeight to accomodate enough height for the actions to prevent weird shifts
 							minHeight: PROJECT_ACTIONS_HEIGHT,
 						}}
 					>
@@ -91,8 +96,10 @@ const ProjectsList = ({
 									height: PROJECT_ACTIONS_HEIGHT,
 								}}
 							>
-								<Tooltip title="Add ticket">
-									<IconButton>
+								<Tooltip title="Create ticket">
+									<IconButton
+										onClick={getCreateTicketForProjectHandler(project.id)}
+									>
 										<AddIcon />
 									</IconButton>
 								</Tooltip>

@@ -1,7 +1,5 @@
 export const MAX_ATTACHMENT_SIZE = 10485760; // 10 MB
 
-export const DESKTOP_SIDEBAR_START = 'md';
-
 export const MEMBERSHIP_ROLE = {
 	ADMIN: 'Admin',
 	PROJECT_MANAGER: 'Project manager',

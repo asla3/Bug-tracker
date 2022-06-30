@@ -17,13 +17,13 @@ import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 import ListItemLinkButton from '@/common/components/ListItemLinkButton';
-import { DESKTOP_SIDEBAR_START } from '@/constants';
 import { ErrorBoundary } from '@/modules/error-boundary';
 import {
 	getRouteToOrganizationProjects,
 	getRouteToOrganizationSettings,
 } from '@/routes';
 
+import { DESKTOP_SIDEBAR_START } from '../constants';
 import OrganizationHeader from './OrganizationHeader';
 import ProjectsList from './ProjectsList';
 

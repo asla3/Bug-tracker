@@ -13,8 +13,9 @@ import Typography from '@mui/material/Typography';
 
 import Link from '@/common/components/Link';
 import { useAuth } from '@/common/context/AuthProvider';
-import { DESKTOP_SIDEBAR_START } from '@/constants';
 import { PROFILE, LOGOUT } from '@/routes';
+
+import { DESKTOP_SIDEBAR_START } from '../../constants';
 
 export interface AppBarProps {
 	/**

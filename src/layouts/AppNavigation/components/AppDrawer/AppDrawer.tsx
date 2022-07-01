@@ -23,7 +23,7 @@ import {
 	getRouteToOrganizationSettings,
 } from '@/routes';
 
-import { DESKTOP_SIDEBAR_START } from '../constants';
+import { DESKTOP_SIDEBAR_START } from '../../constants';
 import OrganizationHeader from './OrganizationHeader';
 import ProjectsList from './ProjectsList';
 

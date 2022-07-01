@@ -1,3 +1,4 @@
+import createEmotionServer from '@emotion/server/create-instance';
 import Document, {
 	Html,
 	DocumentInitialProps,
@@ -5,10 +6,9 @@ import Document, {
 	Main,
 	NextScript,
 } from 'next/document';
-import createEmotionServer from '@emotion/server/create-instance';
 
-import theme from '@/app/theme';
 import createEmotionCache from '@/app/createEmotionCache';
+import theme from '@/app/theme';
 
 // props added by getInitialProps
 interface CustomDocumentInitialProps extends DocumentInitialProps {

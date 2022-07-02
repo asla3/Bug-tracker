@@ -13,7 +13,7 @@ import Typography from '@mui/material/Typography';
 
 import Link from '@/common/components/Link';
 import { useAuth } from '@/common/context/AuthProvider';
-import { PROFILE, LOGOUT } from '@/routes';
+import { PROFILE } from '@/routes';
 
 import { DESKTOP_SIDEBAR_START } from '../../constants';
 
@@ -31,15 +31,19 @@ export interface AppBarProps {
 const AppBar = ({ sx, openDrawer }: AppBarProps) => {
 	const [accountMenuAnchorEl, setAccountMenuAnchorEl] =
 		React.useState<null | HTMLElement>(null);
-
 	const accountMenuIsOpen = Boolean(accountMenuAnchorEl);
 
-	const { user } = useAuth({ assertMode: 'user' });
+	const { user, logout } = useAuth({ assertMode: 'user' });
 
 	const openAccountMenu = (event: React.MouseEvent<HTMLElement>) =>
 		setAccountMenuAnchorEl(event.currentTarget);
 
 	const closeAccountMenu = () => setAccountMenuAnchorEl(null);
+
+	const handleLogoutOptionClick = () => {
+		closeAccountMenu();
+		logout();
+	};
 
 	return (
 		<MuiAppBar sx={sx}>
@@ -96,14 +100,7 @@ const AppBar = ({ sx, openDrawer }: AppBarProps) => {
 					>
 						Account settings
 					</MenuItem>
-					<MenuItem
-						onClick={closeAccountMenu}
-						component={Link}
-						noLinkStyle
-						href={LOGOUT}
-					>
-						Log out
-					</MenuItem>
+					<MenuItem onClick={handleLogoutOptionClick}>Log out</MenuItem>
 				</Menu>
 			</Toolbar>
 		</MuiAppBar>

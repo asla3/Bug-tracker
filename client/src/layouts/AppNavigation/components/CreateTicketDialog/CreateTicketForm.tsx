@@ -6,10 +6,10 @@ import { z } from 'zod';
 
 import type { PendingTicket } from '@/api/types';
 import OrganizationMembershipPicker from '@/common/components/OrganizationMembershipPicker';
-import { useAuth } from '@/common/context/AuthProvider';
 import useOrganizationMemberships from '@/common/hooks/useOrganizationMemberships';
 import useProjects from '@/common/hooks/useProjects';
 import useStoppableEffect from '@/common/hooks/useStoppableEffect';
+import { useAuth } from '@/common/providers/AuthProvider';
 import assertIsNonNullable from '@/common/utils/assertIsNonNullable';
 import getWrongTypeMessage from '@/common/utils/getWrongTypeMessage';
 import {

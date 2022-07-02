@@ -10,7 +10,7 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 import createEmotionCache from '@/app/createEmotionCache';
 import theme from '@/app/theme';
 import type { AppProps } from '@/app/types';
-import AuthProvider from '@/common/context/AuthProvider';
+import AuthProvider from '@/common/providers/AuthProvider';
 import startMockingRequests from '@/mocks/startMockingRequests';
 import { ErrorBoundary } from '@/modules/error-boundary';
 import { getQueryClient } from '@/modules/react-query';

@@ -50,6 +50,8 @@
 		"eslint-config-next": "12.1.0",
 		"eslint-config-prettier": "^8.5.0",
 		"eslint-import-resolver-typescript": "^2.5.0",
+		"eslint-plugin-jest-dom": "^4.0.2",
+		"eslint-plugin-testing-library": "^5.5.1",
 		"jest": "^28.1.2",
 		"jest-environment-jsdom": "^28.1.2",
 		"lint-staged": "^12.3.6",

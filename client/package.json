@@ -61,8 +61,7 @@
 	},
 	"lint-staged": {
 		"*.{js,jsx,ts,tsx}": [
-			"eslint --cache --fix --max-warnings=0",
-			"jest --bail --findRelatedTests"
+			"eslint --cache --fix --max-warnings=0"
 		],
 		"*.{js,jsx,ts,tsx,css,md,html}": "prettier --write"
 	},

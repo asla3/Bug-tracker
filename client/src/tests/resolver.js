@@ -13,7 +13,7 @@ module.exports = (path, options) => {
 		...options,
 		// Use packageFilter to process parsed `package.json` before the resolution (see https://www.npmjs.com/package/resolve#resolveid-opts-cb)
 		packageFilter: (pkg) => {
-			// Here we prevent Jest from considering module-based exports at all for the packages inside the `esmBrowserPackages` array;
+			// Here we prevent Jest from considering module-based exports at all for the packages inside the `packagesToResolveToNode` array;
 			// it falls back to their CommonJS+node "main" property.
 			// Once we're able to migrate our Jest config to ESM and a browser crypto
 			// implementation is available for the browser+ESM version of nanoid to use (eg, via

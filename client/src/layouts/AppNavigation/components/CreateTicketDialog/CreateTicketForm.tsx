@@ -5,6 +5,7 @@ import { Controller, FieldPath } from 'react-hook-form';
 import { z } from 'zod';
 
 import type { PendingTicket } from '@/api/types';
+import OrganizationUserPicker from '@/common/components/OrganizationUserPicker';
 import useMemberships from '@/common/hooks/useMemberships';
 import useProjects from '@/common/hooks/useProjects';
 import useStoppableEffect from '@/common/hooks/useStoppableEffect';
@@ -32,7 +33,6 @@ import {
 
 import DropZone, { OnFileAttached } from './DropZone';
 import PendingAttachmentsList from './PendingAttachmentsList';
-import OrganizationUserPicker from '@/common/components/OrganizationMembershipPicker';
 
 export interface CreateTicketFormProps {
 	organizationId: string;
@@ -74,9 +74,9 @@ const CreateTicketForm = ({
 	resetOnSubmit,
 }: CreateTicketFormProps) => {
 	const {
-		data: organizationMemberships = [],
-		isLoading: isLoadingOrganizationMemberships,
-		isLoadingError: organizationMembershipsCouldntBeLoaded,
+		data: memberships = [],
+		isLoading: isLoadingMemberships,
+		isLoadingError: membershipsCouldntBeLoaded,
 	} = useMemberships(organizationId, {
 		useErrorBoundary: false, // disable the error boundary, because `assignees` is an optional field and the form can be submitted even if this field is empty.
 	});
@@ -299,7 +299,7 @@ const CreateTicketForm = ({
 
 					const errorMessage = error
 						? error.message
-						: organizationMembershipsCouldntBeLoaded
+						: membershipsCouldntBeLoaded
 						? 'There was a problem trying to load users'
 						: undefined;
 
@@ -308,7 +308,7 @@ const CreateTicketForm = ({
 							<OrganizationUserPicker
 								multiple
 								value={value}
-								memberships={organizationMemberships}
+								memberships={memberships}
 								onBlur={onBlur}
 								onChange={(event, value) => onChange(value)}
 								TextFieldProps={{
@@ -319,8 +319,8 @@ const CreateTicketForm = ({
 									error: Boolean(errorMessage),
 									helperText: errorMessage,
 								}}
-								loading={isLoadingOrganizationMemberships}
-								disabled={Boolean(organizationMembershipsCouldntBeLoaded)}
+								loading={isLoadingMemberships}
+								disabled={Boolean(membershipsCouldntBeLoaded)}
 							/>
 							{!currentUserIsAssigned && (
 								<Button size="small" onClick={assignToCurrentUser}>

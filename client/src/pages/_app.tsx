@@ -1,9 +1,8 @@
 import type { AppProps } from '@/app/types';
 import AppProvider from '@/common/providers/AppProvider';
-import startMockingRequests from '@/mocks/startMockingRequests';
 
 if (process.env.NODE_ENV === 'development') {
-	startMockingRequests();
+	require('@/mocks');
 }
 
 const App = ({ Component, pageProps, emotionCache, err }: AppProps) => {

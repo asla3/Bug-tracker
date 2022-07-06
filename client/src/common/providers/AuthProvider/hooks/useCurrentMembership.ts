@@ -4,7 +4,7 @@ import useViewInfo from '@/common/hooks/useViewInfo';
 
 import shouldUseErrorBoundary from '../utils/shouldUseErrorBoundary';
 
-const useCurrentOrganizationMembership = (user: AuthUser | null) => {
+const useCurrentMembership = (user: AuthUser | null) => {
 	const [{ organizationId }, isReady] = useViewInfo();
 
 	const organizationIdIsValid = organizationId !== null;
@@ -14,7 +14,7 @@ const useCurrentOrganizationMembership = (user: AuthUser | null) => {
 	const {
 		isLoading,
 		isIdle,
-		data: currentOrganizationMembership = null,
+		data: currentMembership = null,
 		...queryValues
 	} = useOrganization(organizationIdIsValid ? organizationId : '', {
 		enabled: queryIsEnabled,
@@ -37,14 +37,14 @@ const useCurrentOrganizationMembership = (user: AuthUser | null) => {
 		useErrorBoundary: shouldUseErrorBoundary,
 	});
 
-	const role = currentOrganizationMembership?.role || null;
+	const role = currentMembership?.role || null;
 
 	return {
-		currentOrganizationMembership,
+		currentMembership,
 		role,
 		isLoading: isLoading || !isReady || (queryIsEnabled && isIdle), // I think this last case should be impossible but adding it just to be sure.
 		...queryValues,
 	};
 };
 
-export default useCurrentOrganizationMembership;
+export default useCurrentMembership;

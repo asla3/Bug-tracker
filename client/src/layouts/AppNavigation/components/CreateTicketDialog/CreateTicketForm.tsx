@@ -5,8 +5,7 @@ import { Controller, FieldPath } from 'react-hook-form';
 import { z } from 'zod';
 
 import type { PendingTicket } from '@/api/types';
-import OrganizationMembershipPicker from '@/common/components/OrganizationMembershipPicker';
-import useOrganizationMemberships from '@/common/hooks/useOrganizationMemberships';
+import useMemberships from '@/common/hooks/useMemberships';
 import useProjects from '@/common/hooks/useProjects';
 import useStoppableEffect from '@/common/hooks/useStoppableEffect';
 import { useAuth } from '@/common/providers/AuthProvider';
@@ -33,6 +32,7 @@ import {
 
 import DropZone, { OnFileAttached } from './DropZone';
 import PendingAttachmentsList from './PendingAttachmentsList';
+import OrganizationUserPicker from '@/common/components/OrganizationMembershipPicker';
 
 export interface CreateTicketFormProps {
 	organizationId: string;
@@ -77,7 +77,7 @@ const CreateTicketForm = ({
 		data: organizationMemberships = [],
 		isLoading: isLoadingOrganizationMemberships,
 		isLoadingError: organizationMembershipsCouldntBeLoaded,
-	} = useOrganizationMemberships(organizationId, {
+	} = useMemberships(organizationId, {
 		useErrorBoundary: false, // disable the error boundary, because `assignees` is an optional field and the form can be submitted even if this field is empty.
 	});
 
@@ -305,10 +305,10 @@ const CreateTicketForm = ({
 
 					return (
 						<>
-							<OrganizationMembershipPicker
+							<OrganizationUserPicker
 								multiple
 								value={value}
-								organizationMemberships={organizationMemberships}
+								memberships={organizationMemberships}
 								onBlur={onBlur}
 								onChange={(event, value) => onChange(value)}
 								TextFieldProps={{

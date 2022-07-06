@@ -3,11 +3,7 @@ import * as React from 'react';
 import type { UseMutateAsyncFunction } from 'react-query';
 
 import type { LoginCredentials, RegisterCredentials } from '@/api';
-import type {
-	AuthUser,
-	MembershipRole,
-	OrganizationMembership,
-} from '@/api/types';
+import type { AuthUser, MembershipRole, Membership } from '@/api/types';
 
 export interface AuthContextValues {
 	user: AuthUser | null;
@@ -20,10 +16,10 @@ export interface AuthContextValues {
 	isLoggingOut: boolean;
 	register: UseMutateAsyncFunction<AuthUser, any, RegisterCredentials>;
 	isRegistering: boolean;
-	currentOrganizationMembership: OrganizationMembership | null;
-	currentOrganizationMembershipError: unknown;
-	currentOrganizationMembershipFailureCount: number;
-	isLoadingCurrentOrganizationMembership: boolean;
+	currentMembership: Membership | null;
+	currentMembershipError: unknown;
+	currentMembershipFailureCount: number;
+	isLoadingCurrentMembership: boolean;
 	role: MembershipRole | null;
 	isLoading: boolean;
 }

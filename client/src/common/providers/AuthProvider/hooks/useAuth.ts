@@ -15,7 +15,7 @@ interface AuthContextValuesWithEverythingAsserted
 		'currentOrganizationMembership' | 'role'
 	> {
 	currentOrganizationMembership: NonNullable<
-		AuthContextValues['currentOrganizationMembership']
+		AuthContextValues['currentMembership']
 	>;
 	role: NonNullable<AuthContextValues['role']>;
 }
@@ -52,7 +52,7 @@ function useAuth<TAssertMode extends AssertMode | undefined = undefined>(
 	? AuthContextValuesWithEverythingAsserted
 	: AuthContextValues {
 	const auth = useAuthContext();
-	const { currentOrganizationMembership, role, user } = auth;
+	const { currentMembership, role, user } = auth;
 
 	if (
 		(config?.assertMode === 'user' || config?.assertMode === 'everything') &&
@@ -65,15 +65,9 @@ function useAuth<TAssertMode extends AssertMode | undefined = undefined>(
 		throw new Error(getWrongTypeMessage('role', role));
 	}
 
-	if (
-		config?.assertMode === 'everything' &&
-		currentOrganizationMembership === null
-	) {
+	if (config?.assertMode === 'everything' && currentMembership === null) {
 		throw new Error(
-			getWrongTypeMessage(
-				'currentOrganizationMembership',
-				currentOrganizationMembership
-			)
+			getWrongTypeMessage('currentMembership', currentMembership)
 		);
 	}
 

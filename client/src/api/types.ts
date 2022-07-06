@@ -25,21 +25,14 @@ export interface User {
 
 // contains private data that should just be accesible to the current signed-in user
 export interface AuthUser extends User {
-	memberships: AuthUserMembership[];
+	//todo keeping this because we might want to extend the user model to include private data that will be available only to the logged in user
 }
 
-export interface BaseMembership {
+export interface Membership {
 	id: string;
 	role: MembershipRole;
 	status: MembershipStatus;
 	invitation: Invitation;
-}
-
-export interface AuthUserMembership extends BaseMembership {
-	organization: Organization;
-}
-
-export interface OrganizationMembership extends BaseMembership {
 	user: User | null;
 }
 
@@ -56,7 +49,7 @@ export interface Organization {
 	id: string;
 	name: string;
 	imageUrl: string;
-	memberships: OrganizationMembership[];
+	memberships: Membership[];
 }
 
 export interface Project {

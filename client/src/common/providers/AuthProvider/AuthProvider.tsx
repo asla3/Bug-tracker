@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import AuthContext from './AuthContext';
 import useAuthQueriesAndMutations from './hooks/useAuthQueriesAndMutations';
-import useCurrentOrganizationMembership from './hooks/useCurrentOrganizationMembership';
+import useCurrentMembership from './hooks/useCurrentMembership';
 
 export interface AuthProviderProps {
 	children?: React.ReactNode;
@@ -22,14 +22,14 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 	} = useAuthQueriesAndMutations();
 
 	const {
-		currentOrganizationMembership,
-		error: currentOrganizationMembershipError,
-		isLoading: isLoadingCurrentOrganizationMembership,
-		failureCount: currentOrganizationMembershipFailureCount,
+		currentMembership,
+		error: currentMembershipError,
+		isLoading: isLoadingCurrentMembership,
+		failureCount: currentMembershipFailureCount,
 		role,
-	} = useCurrentOrganizationMembership(user);
+	} = useCurrentMembership(user);
 
-	const isLoading = isLoadingUser || isLoadingCurrentOrganizationMembership;
+	const isLoading = isLoadingUser || isLoadingCurrentMembership;
 
 	const value = React.useMemo(
 		() => ({
@@ -43,10 +43,10 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 			isLoggingOut,
 			register,
 			isRegistering,
-			currentOrganizationMembership,
-			currentOrganizationMembershipError,
-			currentOrganizationMembershipFailureCount,
-			isLoadingCurrentOrganizationMembership,
+			currentMembership,
+			currentMembershipError,
+			currentMembershipFailureCount,
+			isLoadingCurrentMembership,
 			role,
 			isLoading,
 		}),
@@ -61,10 +61,10 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 			isLoggingOut,
 			register,
 			isRegistering,
-			currentOrganizationMembership,
-			currentOrganizationMembershipError,
-			currentOrganizationMembershipFailureCount,
-			isLoadingCurrentOrganizationMembership,
+			currentMembership,
+			currentMembershipError,
+			currentMembershipFailureCount,
+			isLoadingCurrentMembership,
 			role,
 			isLoading,
 		]

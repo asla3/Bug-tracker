@@ -81,7 +81,7 @@ export interface Ticket {
 	name: string;
 	description: string;
 	attachments: TicketAttachment[];
-	assignees: OrganizationMembership[];
+	assignees: Membership[];
 	type: TicketType;
 	project: Project;
 	priority: TicketPriority;

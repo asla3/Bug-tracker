@@ -20,6 +20,7 @@ export interface User {
 	name: string;
 	avatarUrl: string;
 	id: string;
+	email: string;
 }
 
 // contains private data that should just be accesible to the current signed-in user
@@ -47,6 +48,7 @@ export type MembershipRole = GetKeysValue<typeof MEMBERSHIP_ROLE>;
 export type MembershipStatus = GetKeysValue<typeof MEMBERSHIP_STATUS_OPTIONS>;
 
 export interface Invitation {
+	id: string;
 	email: string;
 }
 
